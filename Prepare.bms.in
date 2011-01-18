@@ -45,11 +45,10 @@ EndIf (${COMPUTEORIENTATION})
 
 
 If( ${INPUTTYPE} == 'DWI' )
+  Set( B0Flag "" )
+  Set( IDWIFlag "" )
   If (${CREATEB0} == TRUE ) Then
-    echo ('Creation of the B0 image' )
-    Set (CreateB0Cmd ${dtiestimPATH} --dwi_image ${INPUTDIR}/${DWImage} --tensor_output ${TEMPDIR}/${DTImage} --B0 ${OUTPUTDIR}/${B0} )
-    Run (output ${CreateB0Cmd})
-    Echo (${output})
+    Set( B0Flag --B0 ${OUTPUTDIR}/${B0} )
   EndIf (${CREATEB0})
   echo ('Creation of the DTI' )
   Set( MASK ${INPUT}_mask.nrrd )
@@ -58,10 +57,13 @@ If( ${INPUTTYPE} == 'DWI' )
   Run (output ${GenerateDTICmd})
   Echo (${output})
   If (${CREATEIDWI} == TRUE ) Then
-    echo ('Creation of the IDWI' )
-    Set (GenerateIDWICmd ${dtiestimPATH} --dwi_image ${INPUTDIR}/${DWImage} --tensor_output ${TEMPDIR}/${DTImage} --idwi ${OUTPUTDIR}/${IDWImage} )
-    Run (output ${GenerateIDWICmd})
-    Echo (${output})
+    Set (IDWIFlag --idwi ${OUTPUTDIR}/${IDWImage} )
   EndIf (${CREATEIDWI})
+  If (${CREATEB0} == TRUE || ${CREATEIDWI} == TRUE ) Then
+    echo ('Creation of B0 and/or IDWI' )
+    Set (GenerateCmd ${dtiestimPATH} --dwi_image ${INPUTDIR}/${DWImage} --tensor_output ${TEMPDIR}/${DTImage} ${B0Flag} ${IDWIFlag} )
+    Run (output ${GenerateCmd})
+    Echo (${output})    
+  Endif (${CREATEB0} == TRUE || ${CREATEIDWI} == TRUE )
 EndIf( ${INPUTTYPE} == 'DWI' )
 
