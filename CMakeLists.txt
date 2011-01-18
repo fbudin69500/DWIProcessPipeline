@@ -2,6 +2,11 @@ cmake_minimum_required(VERSION 2.6)
 project (MiceDTIResamplingBatchMakeModule)
 
 
+find_program(LOGEUCLIDEAN ResampleDTIlogEuclidean )
+if( NOT ${LOGEUCLIDEAN} )
+  message( WARNING "ResampleDTIlogEuclidean was not found on your system. ResampleDTI will be used instead")
+endif(NOT  ${LOGEUCLIDEAN} )
+
 # Set the name of the Slicer3 BatchMake module to be created
 set(Slicer3BatchModule MiceDTIResamplingBatchMakeModule)
 
@@ -60,4 +65,7 @@ generateclp(Slicer3BatchModule_SOURCE
 add_executable(${Slicer3BatchModule} ${Slicer3BatchModule_SOURCE})
 target_link_libraries(${Slicer3BatchModule} BatchMakeLib)
 
-
+FIND_PACKAGE(Subversion)
+IF(NOT Subversion_FOUND)
+  MESSAGE(FATAL_ERROR "error: Install SVN and try to re-configure")
+ENDIF()
