@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<executable>
+  <category>
+  Batch Processing
+  </category>
+  <title>
+  Mice DTI Resampling Batchmake 2
+  </title>
+  <description>
+  Starts a pipeline from a DWI, computes the DTI, register it using a scalar image, and computes the new scalar image from the registered DTI
+  </description>
+  <version>0.1</version>
+  <documentation-url></documentation-url>
+  <license></license>
+  <contributor>Francois Budin</contributor>
+  <acknowledgements>This command is based on multiple external tools</acknowledgements>
+  <parameters>
+    <label>Input Datasets</label>
+    <description>Input Datasets</description>
+    <image type="any">
+      <name>data</name>
+      <label>DWI image (or DTI or scalar)</label>
+      <channel>input</channel>
+      <index>0</index>
+      <description>DWI image (or DTI or scalar)</description>
+    </image>
+    <string-enumeration>
+      <name>inputType</name>
+      <description>input is either a DWI, a DTI or a scalar image</description>
+      <label>Input type</label>
+      <longflag>inputType</longflag> 
+      <element>DWI</element>
+      <element>DTI</element>
+      <element>Scalar</element>
+      <default>DWI</default>
+    </string-enumeration>
+    <image type="scalar">
+      <name>templateFile</name>
+      <description>Template, also used a reference image to resample the images if transform is known</description>
+      <label>Template</label>
+      <channel>input</channel>
+      <index>1</index>
+    </image>
+    <directory>
+      <name>outputDir</name>
+      <label>Output directory</label>
+      <longflag>outputDir</longflag>
+      <description>Directory where to save files</description>
+      <default></default>
+    </directory>
+  </parameters>
+  <parameters advanced="true">
+    <label>Additional images</label>
+    <description>Additional images to transform</description>
+    <image type="scalar">
+      <name>im1</name>
+      <label>Image 1</label>
+      <longflag>im1</longflag>
+      <channel>input</channel>
+      <default></default>
+      <description>Additional scalar image to transform</description>
+    </image>
+    <image type="scalar">
+      <name>im2</name>
+      <label>Image 2</label>
+      <longflag>im2</longflag>
+      <channel>input</channel>
+      <default></default>
+      <description>Additional scalar image to transform</description>
+    </image>
+    <image type="scalar">
+      <name>im3</name>
+      <label>Image 3</label>
+      <longflag>im3</longflag>
+      <channel>input</channel>
+      <default></default>
+      <description>Additional scalar image to transform</description>
+    </image>
+    <image type="scalar">
+      <name>imnn1</name>
+      <label>Image 4 (Nearest Neighborhood interpolation)</label>
+      <longflag>imNN1</longflag>
+      <channel>input</channel>
+      <default></default>
+      <description>Additional scalar image to transform (Nearest Neighborhood interpolation)</description>
+    </image>
+    <image type="scalar">
+      <name>imnn2</name>
+      <label>Image 5 (Nearest Neighborhood interpolation)</label>
+      <longflag>imNN2</longflag>
+      <channel>input</channel>
+      <default></default>
+      <description>Additional scalar image to transform (Nearest Neighborhood interpolation)</description>
+    </image>
+  </parameters>
+  <parameters advanced="true">
+    <label>Image Orientation</label>
+    <boolean>
+      <name>computeOrientation</name>
+      <description>Change the orientation of the image so that it is oriented properly</description>
+      <label>Change orientation</label>
+      <longflag>computeOrientation</longflag> 
+      <default>false</default>
+    </boolean>
+    <string>
+      <name>manualOrientation</name>
+      <description>Compute the transformation to obtain the image oriented properly manually</description>
+      <label>Original Image Orientation</label>
+      <longflag>manualOrientation</longflag> 
+      <default>LPS</default>
+    </string>
+  </parameters>
+  <parameters advanced="true">
+    <label>Image to generate</label>
+    <boolean>
+      <name>createB0</name>
+      <description>Compute B0 file from DWI</description>
+      <label>Create B0</label>
+      <longflag>createB0</longflag> 
+      <default>true</default>
+    </boolean>
+    <boolean>
+      <name>createIDWI</name>
+      <description>Compute IDWI from DWI</description>
+      <label>Create IDWI</label>
+      <longflag>createIDWI</longflag>
+      <default>true</default>
+    </boolean>
+  </parameters>
+  <parameters advanced="true">
+    <label>Registration/Resampling</label>
+    <transform fileExtensions=".mat">
+       <name>transformationFile</name>
+       <label>Transform Node (if transform is known)</label>
+       <flag>-f</flag>
+       <longflag>--transformationFile</longflag>
+       <channel>input</channel>
+       <default></default>
+    </transform>
+  </parameters>
+  <parameters advanced="true">
+    <label>Post-processing</label>
+    <boolean>
+      <name>computeFA</name>
+      <description>Compute FA from resampled DTI</description>
+      <label>Compute FA</label>
+      <longflag>computeFA</longflag> 
+      <default>true</default>
+    </boolean>
+    <boolean>
+      <name>computeMD</name>
+      <description>Compute MD from resampled DTI</description>
+      <label>Compute MD</label>
+      <longflag>computeMD</longflag> 
+      <default>true</default>
+    </boolean>
+    <boolean>
+      <name>computeColorFA</name>
+      <description>Compute Color FA from resampled DTI</description>
+      <label>Compute Color FA</label>
+      <longflag>computeColorFA</longflag> 
+      <default>true</default>
+    </boolean>
+  </parameters>
+  <parameters advanced="true">
+    <label>Advanced options</label>
+    <description>Advanced parameters</description>
+    <boolean>
+      <name>logEuclidean</name>
+      <description>Use the log euclidean framework to resample the DTI</description>
+      <label>log-Euclidean</label>
+      <longflag>log</longflag> 
+      <default>true</default>
+    </boolean>
+    <string-enumeration>
+      <name>interpolationType</name>
+      <description>Setting the interpolation type when resampling the image</description>
+      <label>Interpolation type</label>
+      <longflag>interpolation</longflag> 
+      <default>linear</default>
+      <element>linear</element>
+      <element>bs</element>
+      <element>ws</element>
+    </string-enumeration>
+    <string-enumeration>
+      <name>registrationType</name>
+      <description>Setting the type of image used for the registration</description>
+      <label>Registration type</label>
+      <longflag>registration</longflag> 
+      <default>MD</default>
+      <element>MD</element>
+      <element>FA</element>
+    </string-enumeration>
+    <string-enumeration>
+      <name>runChoice</name>
+      <description>Select to not run, or run normally or on local grid using Condor (BatchMake must have been compiled using Condor)</description>
+      <label>Run Choice</label>
+      <longflag>runChoice</longflag> 
+      <element>Do_not_run</element>
+      <element>Run</element>
+      <element>Condor</element>
+      <default>Run</default>
+    </string-enumeration>
+  </parameters>
+</executable>
