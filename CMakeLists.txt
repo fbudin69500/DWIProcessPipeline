@@ -3,17 +3,17 @@ project (MiceDTIResamplingBatchMakeModule)
 
 #Find tools
 find_program(RESAMPLEDTILOGEUCLIDEANTOOL ResampleDTIlogEuclidean )
-if( NOT ${RESAMPLEDTILOGEUCLIDEANTOOL} )
-  message( WARNING "ResampleDTIlogEuclidean was not found on your system. ResampleDTI will be used instead")
-endif(NOT  ${RESAMPLEDTILOGEUCLIDEANTOOL} )
+if(NOT RESAMPLEDTILOGEUCLIDEANTOOL )
+  message( WARNING "${RESAMPLEDTILOGEUCLIDEANTOOL} ResampleDTIlogEuclidean was not found on your system. ResampleDTI will be used instead")
+endif(NOT RESAMPLEDTILOGEUCLIDEANTOOL )
 find_program(RESAMPLEDTITOOL ResampleDTI )
 find_program(REGISTERIMAGESTOOL RegisterImages )
-find_program(COMPUTEORIENTATIONTOOL ComputeOrientation )
+find_program(COMPUTEORIENTATIONTOOL ManualImageOrient )
 find_program(ITKTRANSFORMTOOLSTOOL ITKTransformTools )
 find_program(RESAMPLEVOLUME2TOOL ResampleVolume2 )
 find_program(DIFFUSIONTENSORESTIMATIONTOOL DiffusionTensorEstimation )
-find_program(DTIESTIMTOOL Dtiestim )
-find_program(DTIPROCESSTOOL Dtiprocess )
+find_program(DTIESTIMTOOL dtiestim )
+find_program(DTIPROCESSTOOL dtiprocess )
 
 # Set the name of the Slicer3 BatchMake module to be created
 set(Slicer3BatchModule MiceDTIResamplingBatchMakeModule)
