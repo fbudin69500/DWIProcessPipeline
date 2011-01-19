@@ -3,3 +3,12 @@
  */
 
 #define BatchMake_WRAPPED_APPLICATION_DIR "@BatchMake_WRAPPED_APPLICATION_DIR@"
+#define ResampleDTIlogEuclidean_PATH "@RESAMPLEDTILOGEUCLIDEANTOOL@"
+#define ResampleDTI_PATH "@RESAMPLEDTITOOL@"
+#define RegisterImages_PATH "@REGISTERIMAGESTOOL@"
+#define ComputeOrientation_PATH "@COMPUTEORIENTATIONTOOL@"
+#define ITKTransformTools_PATH "@ITKTRANSFORMTOOLSTOOL@"
+#define ResampleVolume2_PATH "@RESAMPLEVOLUME2TOOL@"
+#define DiffusionTensorEstimation_PATH "@DIFFUSIONTENSORESTIMATIONTOOL@"
+#define dtiestim_PATH "@DTIESTIMTOOL@"
+#define dtiprocess_PATH "@DTIPROCESSTOOL@"

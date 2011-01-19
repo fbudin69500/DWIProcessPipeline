@@ -53,7 +53,7 @@ If( ${INPUTTYPE} == 'DWI' )
   echo ('Creation of the DTI' )
   Set( MASK ${INPUT}_mask.nrrd )
   Set( BASELINE ${INPUT}_baseline.nrrd )
-  Set (GenerateDTICmd DiffusionTensorEstimation ${INPUTDIR}/${DWImage} --removeislands -o 0 -e WLS ${OUTPUTDIR}/${DTImage} ${TEMPDIR}/${BASELINE} ${TEMPDIR}/${MASK} )
+  Set (GenerateDTICmd ${DiffusionTensorEstimationPATH} ${INPUTDIR}/${DWImage} --removeislands -o 0 -e WLS ${OUTPUTDIR}/${DTImage} ${TEMPDIR}/${BASELINE} ${TEMPDIR}/${MASK} )
   Run (output ${GenerateDTICmd})
   Echo (${output})
   If (${CREATEIDWI} == TRUE ) Then

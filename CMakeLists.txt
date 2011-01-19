@@ -1,11 +1,19 @@
 cmake_minimum_required(VERSION 2.6)
 project (MiceDTIResamplingBatchMakeModule)
 
-
-find_program(LOGEUCLIDEAN ResampleDTIlogEuclidean )
-if( NOT ${LOGEUCLIDEAN} )
+#Find tools
+find_program(RESAMPLEDTILOGEUCLIDEANTOOL ResampleDTIlogEuclidean )
+if( NOT ${RESAMPLEDTILOGEUCLIDEANTOOL} )
   message( WARNING "ResampleDTIlogEuclidean was not found on your system. ResampleDTI will be used instead")
-endif(NOT  ${LOGEUCLIDEAN} )
+endif(NOT  ${RESAMPLEDTILOGEUCLIDEANTOOL} )
+find_program(RESAMPLEDTITOOL ResampleDTI )
+find_program(REGISTERIMAGESTOOL RegisterImages )
+find_program(COMPUTEORIENTATIONTOOL ComputeOrientation )
+find_program(ITKTRANSFORMTOOLSTOOL ITKTransformTools )
+find_program(RESAMPLEVOLUME2TOOL ResampleVolume2 )
+find_program(DIFFUSIONTENSORESTIMATIONTOOL DiffusionTensorEstimation )
+find_program(DTIESTIMTOOL Dtiestim )
+find_program(DTIPROCESSTOOL Dtiprocess )
 
 # Set the name of the Slicer3 BatchMake module to be created
 set(Slicer3BatchModule MiceDTIResamplingBatchMakeModule)
@@ -38,9 +46,6 @@ set(Slicer3BatchModule_SOURCE MiceDTIResamplingBatchMakeModule.cxx)
     else(WIN32)
       set(BatchMake_WRAPPED_APPLICATION_DIR ${CMAKE_CURRENT_BINARY_DIR})
     endif(WIN32)
-
-#  find_package(Slicer3 REQUIRED)
-#  include(${Slicer3_USE_FILE})
 
 
 # Configure a header

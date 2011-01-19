@@ -59,6 +59,20 @@ std::string GetDirectory( std::string &dwi )
   return dir1 ;
 }
 
+int SetPath( std::string &pathString , const char* name )
+{
+  if( pathString.substr(pathString.size() - 10 , 9 ).compare( "-NOTFOUND" ) )
+  {
+    pathString= itksys::SystemTools::FindProgram( name ) ;
+    if( !pathString.compare( "" ) )
+    {
+      std::cerr << name << " is missing or its PATH is not set" << std::endl ;
+      return -1 ;
+    }
+  }
+  return 0 ;
+}
+
 int main(int argc, char* argv[])
 {
   PARSE_ARGS;
@@ -92,44 +106,65 @@ int main(int argc, char* argv[])
     imnn2 = RemoveExtension( imnn2 , extimnn2 ) ;
   }
   //Find tools
-  std::string pathlogEuclideanString;
+  //ResampleVolume2
+  std::string pathResampleVolume2String= itksys::SystemTools::FindProgram("ResampleVolume2");
+  if( SetPath( pathResampleVolume2String , "ResampleVolume2" ) )
+  {
+    return EXIT_FAILURE ;
+  }
+  //ResampleDTI (log euclidean and original)  
+  std::string pathlogEuclideanString = ResampleDTIlogEuclidean_PATH ;
   if( logEuclidean )
   {
-    pathlogEuclideanString= itksys::SystemTools::FindProgram("ResampleDTIlogEuclidean");
-    if( !pathlogEuclideanString.compare( "" ) )
+    if( SetPath( pathlogEuclideanString , "ResampleDTIlogEuclidean" ) )
     {
       logEuclidean = false ;
     }
   }
-  std::string pathITKTransformToolsString ;
-  std::string pathManualImageOrientString ;
+  std::string pathResampleDTIString = ResampleDTI_PATH ;
+  if( !logEuclidean )
+  {
+    if( SetPath( pathResampleDTIString , "ResampleDTI" ) )
+    {
+      return EXIT_FAILURE ;
+    }
+  }
+  //ComputeOrientation & ITKTransformTools
+  std::string pathITKTransformToolsString = ITKTransformTools_PATH ;
+  std::string pathManualImageOrientString = ComputeOrientation_PATH ;
   if( computeOrientation )
   {
-    pathITKTransformToolsString= itksys::SystemTools::FindProgram("ITKTransformTools");
-    if( !pathITKTransformToolsString.compare( "" ) )
+    if( SetPath( pathITKTransformToolsString , "ITKTransformTools" ) )
     {
-      std::cerr << "ITKTransformTools is missing or its PATH is not set" << std::endl ;
       return EXIT_FAILURE ;
     }
-    pathManualImageOrientString= itksys::SystemTools::FindProgram("ManualImageOrient");
-    if( !pathManualImageOrientString.compare( "" ) )
+    if( SetPath( pathManualImageOrientString , "ManualImageOrient" ) )
     {
-      std::cerr << "ManualImageOrient is missing or its PATH is not set" << std::endl ;
       return EXIT_FAILURE ;
     }
   }
-  std::string pathdtiestimString;
-  pathdtiestimString= itksys::SystemTools::FindProgram("dtiestim");
-  if( !pathdtiestimString.compare( "" ) )
+  //Register Images
+  std::string pathRegisterImagesString = RegisterImages_PATH ;
+  if( SetPath( pathRegisterImagesString , "RegisterImages" ) )
   {
-    std::cerr << "dtiestim is missing or its PATH is not set" << std::endl ;
     return EXIT_FAILURE ;
   }
-  std::string pathdtiprocessString;
-  pathdtiprocessString= itksys::SystemTools::FindProgram("dtiprocess");
-  if( !pathdtiprocessString.compare( "" ) )
+  //dtiestim
+  std::string pathdtiestimString = dtiestim_PATH ;
+  if( SetPath( pathdtiestimString , "dtiestim" ) )
   {
-    std::cerr << "dtiprocess is missing or its PATH is not set" << std::endl ;
+    return EXIT_FAILURE ;
+  }
+  //dtiprocess
+  std::string pathdtiprocessString = dtiprocess_PATH ;
+  if( SetPath( pathdtiprocessString , "dtiprocess" ) )
+  {
+    return EXIT_FAILURE ;
+  }
+  //DiffusionTensorEstimation
+  std::string pathDiffusionTensorEstimationString = dtiprocess_PATH ;
+  if( SetPath( pathDiffusionTensorEstimationString , "DiffusionTensorEstimation" ) )
+  {
     return EXIT_FAILURE ;
   }
   //get batchmake script directory
@@ -141,6 +176,10 @@ int main(int argc, char* argv[])
   script += SetOptionalString( pathdtiestimString , "dtiestimPATH" ) ;
   script += SetOptionalString( pathManualImageOrientString , "ManualImageOrientPATH" ) ;
   script += SetOptionalString( pathdtiprocessString , "dtiprocessPATH" ) ;
+  script += SetOptionalString( pathRegisterImagesString , "RegisterImagesPATH" ) ;
+  script += SetOptionalString( pathResampleDTIString , "ResampleDTIPATH" ) ;
+  script += SetOptionalString( pathResampleVolume2String , "ResampleVolume2PATH" ) ;
+  script += SetOptionalString( pathDiffusionTensorEstimationString , "DiffusionTensorEstimationPATH" ) ;
   script += "Set( INPUTDIR " + dir + " )\n" ;
   script += "Set( INPUT " + data + " )\n" ;
   script += "Set( EXT " + ext + " )\n" ;
