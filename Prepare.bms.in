@@ -20,7 +20,7 @@ If (${COMPUTEORIENTATION} == TRUE ) Then
       Set( DWImage ${ORIENTED_IMAGE} )
       Set( CmdTool ResampleVolume2 )
   EndIf( ${INPUTTYPE} == 'DWI' )
-  If( ${INPUTTYPE} == 'Scalar' )
+  If( ${INPUTTYPE} == 'scalar' )
       Set( ORIG_IMAGE ${B0} )
       Set( ORIENTED_IMAGE ${INPUT}_oriented.nrrd )
       Set( B0 ${ORIENTED_IMAGE} )

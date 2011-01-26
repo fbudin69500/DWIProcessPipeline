@@ -89,6 +89,11 @@ int main(int argc, char* argv[])
   PARSE_ARGS;
   std::string ext ;
   std::string dir ;
+  if( outputDir[ outputDir.size() - 1 ] == '/'
+   || outputDir[ outputDir.size() - 1 ] == '\\' )
+  {
+     outputDir.resize( outputDir.size() - 1 ) ;
+  }
   dir = GetDirectory( data ) ;
   data = RemoveExtension( data , ext ) ;
   std::string extim1 ;
