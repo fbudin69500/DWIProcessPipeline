@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.6)
-project (MiceDTIResamplingBatchMakeModule)
+project (DWIResamplingSlicer3Module)
 
 #Find tools
 find_program(RESAMPLEDTILOGEUCLIDEANTOOL ResampleDTIlogEuclidean )
@@ -16,10 +16,10 @@ find_program(DTIESTIMTOOL dtiestim )
 find_program(DTIPROCESSTOOL dtiprocess )
 
 # Set the name of the Slicer3 BatchMake module to be created
-set(Slicer3BatchModule MiceDTIResamplingBatchMakeModule)
+set(Slicer3BatchModule DWIResamplingSlicer3Module)
 
 # Set the source code for the Slicer3 BatchMake module
-set(Slicer3BatchModule_SOURCE MiceDTIResamplingBatchMakeModule.cxx)
+set(Slicer3BatchModule_SOURCE DWIResamplingSlicer3Module.cxx)
 
   find_package(ITK REQUIRED)
   include(${ITK_USE_FILE})

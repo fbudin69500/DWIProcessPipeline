@@ -3,7 +3,7 @@
 #include <bmScriptParser.h>
 
 
-#include "MiceDTIResamplingBatchMakeModuleCLP.h"
+#include "DWIResamplingSlicer3ModuleCLP.h"
 #include <fstream>
 #include <itkTransformFileReader.h>
 #include <itksys/SystemTools.hxx>
@@ -48,20 +48,31 @@ std::string RemoveExtension( std::string data , std::string &ext )
   int found = data.rfind( "." ) ;
   ext = data.substr( found + 1 , data.size() - found - 1 ) ;
   data.resize( found ) ;
+  if( !ext.compare( "gz" ) )
+  {
+     found = data.rfind( "." ) ;
+     ext = data.substr( found + 1 , data.size() - found - 1 ) ;
+     ext = ext + ".gz" ;
+     data.resize( found ) ;
+  }
   return data ;
 }
 
 std::string GetDirectory( std::string &dwi )
 {
   size_t found = dwi.rfind('/') ;
-  itksys_stl::string dir1 = dwi.substr( 0 , found ) ;
-  dwi.erase( dwi.begin() , dwi.begin() + found + 1 ) ;
-  return dir1 ;
+  if( found != std::string::npos )
+  {
+    itksys_stl::string dir1 = dwi.substr( 0 , found ) ;
+    dwi.erase( dwi.begin() , dwi.begin() + found + 1 ) ;
+    return dir1 ;
+  }
+  return "." ;
 }
 
 int SetPath( std::string &pathString , const char* name )
 {
-  if( pathString.substr(pathString.size() - 10 , 9 ).compare( "-NOTFOUND" ) )
+  if( !pathString.substr(pathString.size() - 10 , 9 ).compare( "-NOTFOUND" ) )
   {
     pathString= itksys::SystemTools::FindProgram( name ) ;
     if( !pathString.compare( "" ) )
@@ -214,8 +225,10 @@ int main(int argc, char* argv[])
   
     // Write script to disk to execute the batch
   // -------------------------
+  itksys::SystemTools::MakeDirectory( outputDir.c_str() ) ;
   std::string scriptFile = outputDir
                            + "/DTIPipeline.bms";
+  std::cout<<scriptFile<<std::endl;
   std::ofstream file( scriptFile.c_str() );
   file << script; 
   file.close();
