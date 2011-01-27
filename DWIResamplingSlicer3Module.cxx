@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <bmScriptParser.h>
 
-
+#include <algorithm>
 #include "DWIResamplingSlicer3ModuleCLP.h"
 #include <fstream>
 #include <itkTransformFileReader.h>
@@ -84,13 +84,68 @@ int SetPath( std::string &pathString , const char* name )
   return 0 ;
 }
 
+std::vector< std::string > SplitPath( std::string path )
+{
+   size_t found = 0 ;
+   std::vector< std::string > split ;
+   do
+   {
+     size_t found = path.find('/') ;
+     if( found != std::string::npos )
+     {
+       std::string dir = path.substr( 0 , found ) ;
+       if( dir.compare( "." ) )
+       {
+          split.push_back( dir ) ;
+       }
+       path.erase( path.begin() , path.begin() + found + 1 ) ;
+     }
+   }
+   while( found != std::string::npos ) ;
+   return split ;
+}
+
+std::string RelativePath( std::string ReferencePath , std::string path )
+{
+   std::string rPath ;
+   std::vector< string > rsplitPath = SplitPath( ReferencePath ) ;
+   std::vector< string > splitPath = SplitPath( path ) ;
+   unsigned int count = 0 ;
+   for( unsigned int i = 0 ; i < std::min( rsplitPath.size() , splitPath.size() ) ; i++ )
+   {
+      if( !rsplitPath[ i ].compare( splitPath[ i ] ) )
+      {
+         count++ ;
+      }
+   }
+   for( unsigned int i = count ; i < rsplitPath.size() ; i++ )
+   {
+      rPath += "../" ;
+   }
+   for( unsigned int i = count ; i < splitPath.size() ; i++ )
+   {
+      rPath += splitPath[ i ] ;
+   }
+   return rPath ;
+}
+
 int main(int argc, char* argv[])
 {
   PARSE_ARGS;
   std::string ext ;
   std::string dir ;
-  if( outputDir[ outputDir.size() - 1 ] == '/'
-   || outputDir[ outputDir.size() - 1 ] == '\\' )
+  itksys::SystemTools::ConvertToUnixSlashes( data ) ;
+  itksys::SystemTools::ConvertToUnixSlashes( outputDir ) ;
+  itksys::SystemTools::ConvertToUnixSlashes( templateFile ) ;
+  itksys::SystemTools::ConvertToUnixSlashes( im1 ) ;
+  itksys::SystemTools::ConvertToUnixSlashes( im2 ) ;
+  itksys::SystemTools::ConvertToUnixSlashes( im3 ) ;
+  itksys::SystemTools::ConvertToUnixSlashes( imnn1 ) ;
+  itksys::SystemTools::ConvertToUnixSlashes( imnn2 ) ;
+  itksys::SystemTools::ConvertToUnixSlashes( transformationFile ) ;
+  std::string transformRelativePath = RelativePath( outputDir , transformationFile ) ;
+  std::string inputRelativePath = RelativePath( outputDir , data ) ;
+  if( outputDir[ outputDir.size() - 1 ] == '/' )
   {
      outputDir.resize( outputDir.size() - 1 ) ;
   }
@@ -183,6 +238,12 @@ int main(int argc, char* argv[])
   {
     return EXIT_FAILURE ;
   }
+  //CreateMRML
+  std::string pathCreateMRMLString = CreateMRML_PATH ;
+  if( SetPath( pathCreateMRMLString , "CreateMRML" ) )
+  {
+     return EXIT_FAILURE ;
+  }
   //get batchmake script directory
   std::string script = "echo('Starting BatchMake Script')\n" ;
 ////Set options/////////////////////
@@ -196,6 +257,9 @@ int main(int argc, char* argv[])
   script += SetOptionalString( pathResampleDTIString , "ResampleDTIPATH" ) ;
   script += SetOptionalString( pathResampleVolume2String , "ResampleVolume2PATH" ) ;
   script += SetOptionalString( pathDiffusionTensorEstimationString , "DiffusionTensorEstimationPATH" ) ;
+  script += SetOptionalString( pathCreateMRMLString , "CreateMRMLPATH" ) ;
+  script += SetOptionalString( transformRelativePath , "TransformRelativePATH" ) ;
+  script += SetOptionalString( inputRelativePath , "InputRelativePATH" ) ;
   script += "Set( INPUTDIR " + dir + " )\n" ;
   script += "Set( INPUT " + data + " )\n" ;
   script += "Set( EXT " + ext + " )\n" ;

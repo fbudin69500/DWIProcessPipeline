@@ -12,3 +12,4 @@
 #define DiffusionTensorEstimation_PATH "@DIFFUSIONTENSORESTIMATIONTOOL@"
 #define dtiestim_PATH "@DTIESTIMTOOL@"
 #define dtiprocess_PATH "@DTIPROCESSTOOL@"
+#define CreateMRML_PATH "@CREATEMRMLTOOL@"

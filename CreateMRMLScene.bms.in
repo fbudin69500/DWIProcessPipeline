@@ -1,0 +1,49 @@
+Set( MRMLCmd ${OUTPUTDIR}/scene.mrml -v ${RESAMPLED_IMAGE} )
+Set( MRMLCmd -t ${TransformRelativePATH}/${TRANSFORMATIONFILE} -n Transform )
+Set( MRMLCmd -v ${InputRelativePATH}/${INPUT}.${EXT} -p Transform )
+
+If( ${INPUTTYPE} == 'DWI' )
+  If (${CREATEB0} == TRUE ) Then
+    Set (MRMLCmd ${MRMLCmd} ${B0} )
+  EndIf (${CREATEB0})
+  If (${CREATEIDWI} == TRUE ) Then
+    Set (MRMLCmd ${MRMLCmd} ${IDWImage} )
+  EndIf (${CREATEIDWI})
+EndIf( ${INPUTTYPE} == 'DWI' )
+
+If( ${IM1} != '' )
+    Set (MRMLCmd ${MRMLCmd} ${IM1}_reg.nrrd )
+Endif( ${IM1} != '' )
+If( ${IM2} != '' )
+    Set (MRMLCmd ${MRMLCmd} ${IM2}_reg.nrrd )
+Endif( ${IM2} != '' )
+If( ${IM3} != '' )
+    Set (MRMLCmd ${MRMLCmd} ${IM3}_reg.nrrd )
+Endif( ${IM3} != '' )
+
+If( ${IMNN1} != '' )
+    Set (MRMLCmd ${MRMLCmd} ${IMNN1}_reg.nrrd )
+Endif( ${IMNN1} != '' )
+If( ${IMNN2} != '' )
+    Set (MRMLCmd ${MRMLCmd} ${IMNN2}_reg.nrrd )
+Endif( ${IMNN2} != '' )
+
+If( ${INPUTTYPE} == 'DWI' OR ${INPUTTYPE} == 'DTI' )
+  If (${COMPUTEFA} == TRUE ) Then
+     Set( FA ${RESAMPLED_IMAGE}_FA.nrrd )
+     Set( MRMLCmd ${MRMLCmd}  ${FA} )
+  EndIf (${COMPUTEFA} == TRUE )
+  If (${COMPUTEMD} == TRUE ) Then
+     Set( MD ${RESAMPLED_IMAGE}_MD.nrrd )
+     Set( MRMLCmd ${MRMLCmd}  ${MD} )
+  EndIf (${COMPUTEMD} == TRUE )
+  If (${COMPUTEMD} == TRUE ) Then
+     Set( COLORFA ${RESAMPLED_IMAGE}_ColorFA.nrrd )
+     Set( MRMLCmd ${MRMLCmd} ${COLORFA} )
+  EndIf (${COMPUTEMD} == TRUE )
+Endif( ${INPUTTYPE} == 'DWI' OR ${INPUTTYPE} == 'DTI' )
+
+Echo ('Creates MRML scene')
+Run (output ${MRMLCmd})
+Echo (${output})
+
