@@ -166,6 +166,13 @@
     <label>Advanced options</label>
     <description>Advanced parameters</description>
     <boolean>
+      <name>scale</name>
+      <description>Scale the image and the atlas to 1,1,1</description>
+      <label>Scale to 1,1,1</label>
+      <longflag>scale</longflag> 
+      <default>false</default>
+    </boolean>
+    <boolean>
       <name>logEuclidean</name>
       <description>Use the log euclidean framework to resample the DTI</description>
       <label>log-Euclidean</label>

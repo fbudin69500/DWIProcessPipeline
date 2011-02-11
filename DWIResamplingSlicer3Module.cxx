@@ -9,7 +9,7 @@
 #include <itksys/SystemTools.hxx>
 #include <itksys/Process.h>
 #include "SlicerBatchMakeConfig.h"
-
+#include <sys/param.h>
 
 std::string SetOptionalString( std::string var ,
                      std::string BATCHNAME
@@ -87,21 +87,28 @@ int SetPath( std::string &pathString , const char* name )
 std::vector< std::string > SplitPath( std::string path )
 {
    size_t found = 0 ;
+   bool isDir = itksys::SystemTools::FileIsDirectory( path.c_str() ) ;
    std::vector< std::string > split ;
    do
    {
-     size_t found = path.find('/') ;
+     std::cout<<path<<std::endl;
+     found = path.find('/') ;
      if( found != std::string::npos )
      {
        std::string dir = path.substr( 0 , found ) ;
        if( dir.compare( "." ) )
        {
+          std::cout<<dir<<std::endl;
           split.push_back( dir ) ;
        }
        path.erase( path.begin() , path.begin() + found + 1 ) ;
      }
    }
    while( found != std::string::npos ) ;
+   if( isDir )
+   {
+      split.push_back( path ) ;
+   }
    return split ;
 }
 
@@ -124,7 +131,15 @@ std::string RelativePath( std::string ReferencePath , std::string path )
    }
    for( unsigned int i = count ; i < splitPath.size() ; i++ )
    {
-      rPath += splitPath[ i ] ;
+      rPath += splitPath[ i ] + "/" ;
+   }
+   if( !rPath.compare( "" ) )
+   {
+      rPath = "." ;
+   }
+   else
+   {
+      rPath.resize( rPath.size() - 1 ) ;
    }
    return rPath ;
 }
@@ -134,17 +149,51 @@ int main(int argc, char* argv[])
   PARSE_ARGS;
   std::string ext ;
   std::string dir ;
-  itksys::SystemTools::ConvertToUnixSlashes( data ) ;
-  itksys::SystemTools::ConvertToUnixSlashes( outputDir ) ;
-  itksys::SystemTools::ConvertToUnixSlashes( templateFile ) ;
-  itksys::SystemTools::ConvertToUnixSlashes( im1 ) ;
-  itksys::SystemTools::ConvertToUnixSlashes( im2 ) ;
-  itksys::SystemTools::ConvertToUnixSlashes( im3 ) ;
-  itksys::SystemTools::ConvertToUnixSlashes( imnn1 ) ;
-  itksys::SystemTools::ConvertToUnixSlashes( imnn2 ) ;
-  itksys::SystemTools::ConvertToUnixSlashes( transformationFile ) ;
-  std::string transformRelativePath = RelativePath( outputDir , transformationFile ) ;
-  std::string inputRelativePath = RelativePath( outputDir , data ) ;
+  data = itksys::SystemTools::ConvertToUnixOutputPath( data.c_str() ) ;
+  outputDir = itksys::SystemTools::ConvertToUnixOutputPath( outputDir.c_str() ) ;
+  templateFile = itksys::SystemTools::ConvertToUnixOutputPath( templateFile.c_str() ) ;
+  im1 = itksys::SystemTools::ConvertToUnixOutputPath( im1.c_str() ) ;
+  im2 = itksys::SystemTools::ConvertToUnixOutputPath( im2.c_str() ) ;
+  im3 = itksys::SystemTools::ConvertToUnixOutputPath( im3.c_str() ) ;
+  imnn1 = itksys::SystemTools::ConvertToUnixOutputPath( imnn1.c_str() ) ;
+  imnn2 = itksys::SystemTools::ConvertToUnixOutputPath( imnn2.c_str() ) ;
+  transformationFile = itksys::SystemTools::ConvertToUnixOutputPath( transformationFile.c_str() ) ;
+  std::string outputDirForRelative ;
+  if( !itksys::SystemTools::FileIsFullPath( outputDir.c_str() ) )
+  {
+     char path[MAXPATHLEN] ;
+     getcwd(path, MAXPATHLEN) ;
+     outputDirForRelative = path ;
+     if( outputDirForRelative[ outputDirForRelative.size() - 1 ] != '/' )
+     {
+        outputDirForRelative += "/" ;
+     }
+     outputDirForRelative += outputDir ;
+     std::cout<<"plop "<<outputDirForRelative<<std::endl;
+  }
+  else
+  {
+     std::cout<<"plo2"<<std::endl;
+     outputDirForRelative = outputDir ;
+  }
+    std::string transformRelativePath ;
+  if( transformationFile.compare( "" ) )
+  {
+     std::cout<<"plop3"<<std::endl;
+    std::string transformationFileRelative = itksys::SystemTools::GetRealPath( transformationFile.c_str() ) ;
+    std::string transformRelativePath = itksys::SystemTools::RelativePath( outputDirForRelative.c_str() , transformationFileRelative.c_str() ) ;
+  }
+  else
+  {
+     std::cout<<"plop4"<<std::endl;
+     transformRelativePath = outputDirForRelative ;
+  }
+  std::string dataRelative = itksys::SystemTools::GetRealPath( data.c_str() ) ;
+  std::string inputRelativePath = itksys::SystemTools::RelativePath( outputDirForRelative.c_str() , dataRelative.c_str() ) ;
+  std::string templateFileRelative = itksys::SystemTools::GetRealPath( templateFile.c_str() ) ;
+  std::string templateDirForRelative = itksys::SystemTools::RelativePath( outputDirForRelative.c_str() , templateFileRelative.c_str() ) ;
+  std::cout<<templateDirForRelative<<std::endl;
+  std::string templateDir = GetDirectory( templateFile ) ;
   if( outputDir[ outputDir.size() - 1 ] == '/' )
   {
      outputDir.resize( outputDir.size() - 1 ) ;
@@ -238,6 +287,12 @@ int main(int argc, char* argv[])
   {
     return EXIT_FAILURE ;
   }
+  //ImageMath
+  std::string pathImageMathString = ImageMath_PATH ;
+  if( SetPath( pathImageMathString , "ImageMath" ) )
+  {
+    return EXIT_FAILURE ;
+  }
   //CreateMRML
   std::string pathCreateMRMLString = CreateMRML_PATH ;
   if( SetPath( pathCreateMRMLString , "CreateMRML" ) )
@@ -249,6 +304,7 @@ int main(int argc, char* argv[])
 ////Set options/////////////////////
   script += SetOptionalString( BatchMake_WRAPPED_APPLICATION_DIR , "SCRIPTDIR" ) ;
   script += SetOptionalString( pathITKTransformToolsString , "ITKTransformToolsPATH" ) ;
+  script += SetOptionalString( pathImageMathString , "ImageMathPATH" ) ;
   script += SetOptionalString( pathlogEuclideanString , "LogEuclideanPATH" ) ;
   script += SetOptionalString( pathdtiestimString , "dtiestimPATH" ) ;
   script += SetOptionalString( pathManualImageOrientString , "ManualImageOrientPATH" ) ;
@@ -260,10 +316,12 @@ int main(int argc, char* argv[])
   script += SetOptionalString( pathCreateMRMLString , "CreateMRMLPATH" ) ;
   script += SetOptionalString( transformRelativePath , "TransformRelativePATH" ) ;
   script += SetOptionalString( inputRelativePath , "InputRelativePATH" ) ;
+  script += SetOptionalString( templateDirForRelative , "atlasRelativePATH" ) ;
   script += "Set( INPUTDIR " + dir + " )\n" ;
   script += "Set( INPUT " + data + " )\n" ;
   script += "Set( EXT " + ext + " )\n" ;
   script += "Set( TEMPLATE " + templateFile + " )\n" ;
+  script += "Set( TEMPLATEDIR " + templateDir + " )\n" ;
   script += "Set( INPUTTYPE " + inputType + " )\n" ;
   script += "Set( OUTPUTDIR " + outputDir + " )\n" ;
   script += SetOptionalString( im1 , "IM1" ) ;
@@ -285,6 +343,7 @@ int main(int argc, char* argv[])
   script += SetBOOL( computeMD , "COMPUTEMD" ) ;
   script += SetBOOL( computeColorFA , "COMPUTECOLORFA" ) ;
   script += SetBOOL( logEuclidean , "LOG" ) ;
+  script += SetBOOL( scale , "SCALE" ) ;
   script += "Set( REGTYPE \'" + registrationType + "\' )\n" ;
   script += "Set( INTERPOLATION \'" + interpolationType + "\' )\n" ;
   script += "include( " ;

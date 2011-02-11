@@ -13,3 +13,4 @@
 #define dtiestim_PATH "@DTIESTIMTOOL@"
 #define dtiprocess_PATH "@DTIPROCESSTOOL@"
 #define CreateMRML_PATH "@CREATEMRMLTOOL@"
+#define ImageMath_PATH "@ImageMathTOOL@"

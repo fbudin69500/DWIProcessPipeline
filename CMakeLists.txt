@@ -15,6 +15,7 @@ find_program(DIFFUSIONTENSORESTIMATIONTOOL DiffusionTensorEstimation )
 find_program(DTIESTIMTOOL dtiestim )
 find_program(DTIPROCESSTOOL dtiprocess )
 find_program(CREATEMRMLTOOL CreateMRML )
+find_program(ImageMathTOOL ImageMath )
 
 # Set the name of the Slicer3 BatchMake module to be created
 set(Slicer3BatchModule DWIResamplingSlicer3Module)

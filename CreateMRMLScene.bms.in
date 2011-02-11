@@ -1,6 +1,7 @@
-Set( MRMLCmd ${OUTPUTDIR}/scene.mrml -v ${RESAMPLED_IMAGE} )
-Set( MRMLCmd -t ${TransformRelativePATH}/${TRANSFORMATIONFILE} -n Transform )
-Set( MRMLCmd -v ${InputRelativePATH}/${INPUT}.${EXT} -p Transform )
+Set( MRMLCmd ${CreateMRMLPATH} ${OUTPUTDIR}/scene.mrml -v -f ${RESAMPLED_IMAGE} )
+Set( MRMLCmd ${MRMLCmd} -t -f ${TransformRelativePATH}${TRANSFORMATIONFILE} -n Transform )
+Set( MRMLCmd ${MRMLCmd} -v -f ${InputRelativePATH} -p Transform )
+Set( MRMLCmd ${MRMLCmd} -v -f ${atlasRelativePATH} )
 
 If( ${INPUTTYPE} == 'DWI' )
   If (${CREATEB0} == TRUE ) Then
