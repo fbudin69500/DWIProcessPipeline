@@ -173,13 +173,20 @@ int main(int argc, char* argv[])
   }
   else
   {
-     std::cout<<"plo2"<<std::endl;
+     std::cout<<"plop2"<<std::endl;
      outputDirForRelative = outputDir ;
+     if( outputDirForRelative[ outputDirForRelative.size() - 1 ] != '/' )
+     {
+        outputDirForRelative += "/" ;
+     }
+     //outputDirForRelative += "addition" ;
   }
+  outputDirForRelative = itksys::SystemTools::GetRealPath( outputDirForRelative.c_str() ) ;
+  std::cout<< outputDirForRelative << std::endl ;
     std::string transformRelativePath ;
   if( transformationFile.compare( "" ) )
   {
-     std::cout<<"plop3"<<std::endl;
+    std::cout<<"plop3"<<std::endl;
     std::string transformationFileRelative = itksys::SystemTools::GetRealPath( transformationFile.c_str() ) ;
     std::string transformRelativePath = itksys::SystemTools::RelativePath( outputDirForRelative.c_str() , transformationFileRelative.c_str() ) ;
   }
@@ -282,7 +289,7 @@ int main(int argc, char* argv[])
     return EXIT_FAILURE ;
   }
   //DiffusionTensorEstimation
-  std::string pathDiffusionTensorEstimationString = dtiprocess_PATH ;
+  std::string pathDiffusionTensorEstimationString = DiffusionTensorEstimation_PATH ;
   if( SetPath( pathDiffusionTensorEstimationString , "DiffusionTensorEstimation" ) )
   {
     return EXIT_FAILURE ;
