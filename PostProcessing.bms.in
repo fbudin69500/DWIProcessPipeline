@@ -1,21 +1,22 @@
 #ResampleDTI
+GetFilename( RESAMPLED_IMAGE_TAG ${RESAMPLED_IMAGE} NAME_WITHOUT_EXTENSION )
 If (${COMPUTEFA} == TRUE ) Then
         echo ('Computation of FA')
-        Set( FA ${RESAMPLED_IMAGE}_FA.nrrd )
+        Set( FA ${RESAMPLED_IMAGE_TAG}_FA.nrrd )
         Set ( COMPUTEFACmd ${dtiprocessPATH} --dti_image ${OUTPUTDIR}/${RESAMPLED_IMAGE} -f ${OUTPUTDIR}/${FA} --scalar-float )
         Run ( output ${COMPUTEFACmd} )
         echo( ${output} )
 EndIf (${COMPUTEFA} == TRUE )
 If (${COMPUTEMD} == TRUE ) Then
         echo ('Computation of MD')
-        Set( MD ${RESAMPLED_IMAGE}_MD.nrrd )
+        Set( MD ${RESAMPLED_IMAGE_TAG}_MD.nrrd )
         Set ( COMPUTEMDCmd ${dtiprocessPATH} --dti_image ${OUTPUTDIR}/${RESAMPLED_IMAGE} -m ${OUTPUTDIR}/${MD} --scalar-float )
         Run ( output ${COMPUTEMDCmd} )
         echo( ${output} )
 EndIf (${COMPUTEMD} == TRUE )
 If (${COMPUTEMD} == TRUE ) Then
         echo ('Computation of Color FA')
-        Set( COLORFA ${RESAMPLED_IMAGE}_ColorFA.nrrd )
+        Set( COLORFA ${RESAMPLED_IMAGE_TAG}_ColorFA.nrrd )
         Set ( COMPUTECOLORFACmd ${dtiprocessPATH} --dti_image ${OUTPUTDIR}/${RESAMPLED_IMAGE} --color_fa_output ${OUTPUTDIR}/${COLORFA} --scalar-float )
         Run (output ${COMPUTECOLORFACmd})
         echo( ${output} )
