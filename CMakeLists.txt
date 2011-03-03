@@ -16,6 +16,7 @@ find_program(DTIESTIMTOOL dtiestim )
 find_program(DTIPROCESSTOOL dtiprocess )
 find_program(CREATEMRMLTOOL CreateMRML )
 find_program(ImageMathTOOL ImageMath )
+find_program(HistogramMatchingTOOL HistogramMatching )
 
 # Set the name of the Slicer3 BatchMake module to be created
 set(Slicer3BatchModule DWIResamplingSlicer3Module)

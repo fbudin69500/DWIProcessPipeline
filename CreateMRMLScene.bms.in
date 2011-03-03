@@ -2,31 +2,46 @@ Set( MRMLCmd ${CreateMRMLPATH} ${OUTPUTDIR}/scene.mrml -v -f ${RESAMPLED_IMAGE} 
 If( ${INPUTTYPE} == 'DWI' || ${INPUTTYPE} == 'DTI' )
   Set( MRMLCmd ${MRMLCmd} -y DTI )
 EndIf( ${INPUTTYPE} == 'DWI' || ${INPUTTYPE} == 'DTI' )
+
+GetFilename( TRANSFORMATIONFILE ${TRANSFORMATIONFILE} NAME )
+
 Set( MRMLCmd ${MRMLCmd} -t -f ${TransformRelativePATH}${TRANSFORMATIONFILE} -n Transform )
+
 If (${COMPUTEORIENTATION} == TRUE ) Then
-  Set( MRMLCmd ${MRMLCmd} -v -f ${ORIENTED_IMAGE} -p Transform )
-Else (${COMPUTEORIENTATION} == TRUE )
-  Set( MRMLCmd ${MRMLCmd} -v -f ${InputRelativePATH} -p Transform )
+  Set( MRMLCmd ${MRMLCmd} -v -f ${ORIENTED_IMAGE} )
+  If( ${INPUTTYPE} == 'DWI' )
+    Set( MRMLCmd ${MRMLCmd} -y DWI )
+  EndIf( ${INPUTTYPE} == 'DWI'  )
+  If( ${INPUTTYPE} == 'DTI' )
+    Set( MRMLCmd ${MRMLCmd} -y DTI )
+  EndIf( ${INPUTTYPE} == 'DTI'  )  
 EndIf (${COMPUTEORIENTATION} == TRUE )
-If( ${INPUTTYPE} == 'DWI' )
-  Set( MRMLCmd ${MRMLCmd} -y DWI )
-EndIf( ${INPUTTYPE} == 'DWI'  )
-If( ${INPUTTYPE} == 'DTI' )
-  Set( MRMLCmd ${MRMLCmd} -y DTI )
-EndIf( ${INPUTTYPE} == 'DTI'  )
+
+If( ${COPY_INPUTS} == TRUE ) Then
+  Set( MRMLCmd ${MRMLCmd} -v -f ${ROOTNAME}.nrrd )
+  If( ${INPUTTYPE} == 'DWI' )
+    Set( MRMLCmd ${MRMLCmd} -y DWI )
+  EndIf( ${INPUTTYPE} == 'DWI'  )
+  If( ${INPUTTYPE} == 'DTI' )
+    Set( MRMLCmd ${MRMLCmd} -y DTI )
+  EndIf( ${INPUTTYPE} == 'DTI'  )
+EndIf( ${COPY_INPUTS} == TRUE )
+
 
 If( ${SCALE} == TRUE )
   Set( MRMLCmd ${MRMLCmd} -v -f template_iso_scale.nrrd )
 Else( ${SCALE} == TRUE )
-  Set( MRMLCmd ${MRMLCmd} -v -f ${atlasRelativePATH} )
+  If( ${COPY_INPUTS} == TRUE ) Then
+    Set( MRMLCmd ${MRMLCmd} -v -f ${TEMPLATE} )
+  EndIf( ${COPY_INPUTS} == TRUE )
 EndIf( ${SCALE} == TRUE )
 
 If( ${INPUTTYPE} == 'DWI' )
   If (${CREATEB0} == TRUE ) Then
-    Set (MRMLCmd ${MRMLCmd} -v -f ${INPUT}_b0_reg.nrrd )
+    Set (MRMLCmd ${MRMLCmd} -v -f ${ROOTNAME}_b0_reg.nrrd )
   EndIf (${CREATEB0})
   If (${CREATEIDWI} == TRUE ) Then
-    Set (MRMLCmd ${MRMLCmd} -v -f ${INPUT}_idwi_reg.nrrd )
+    Set (MRMLCmd ${MRMLCmd} -v -f ${ROOTNAME}_idwi_reg.nrrd )
   EndIf (${CREATEIDWI})
 EndIf( ${INPUTTYPE} == 'DWI' )
 
@@ -65,6 +80,17 @@ If( ${INPUTTYPE} == 'DWI' || ${INPUTTYPE} == 'DTI' )
      Set( COLORFA ${RESAMPLED_IMAGE_TAG}_ColorFA.nrrd )
      Set( MRMLCmd ${MRMLCmd} -v -f ${COLORFA} -y vector)
   EndIf (${COMPUTEMD} == TRUE )
+
+  If (${COMPUTEAD} == TRUE ) Then
+     Set( AD ${RESAMPLED_IMAGE_TAG}_AD.nrrd )
+     Set( MRMLCmd ${MRMLCmd} -v -f ${AD} -y vector)
+  EndIf (${COMPUTEAD} == TRUE )
+  If (${COMPUTERD} == TRUE ) Then
+     Set( RD ${RESAMPLED_IMAGE_TAG}_RD.nrrd )
+     Set( MRMLCmd ${MRMLCmd} -v -f ${RD} -y vector)
+  EndIf (${COMPUTERD} == TRUE )
+
+
 Endif( ${INPUTTYPE} == 'DWI' || ${INPUTTYPE} == 'DTI' )
 
 Echo ('Creates MRML scene')

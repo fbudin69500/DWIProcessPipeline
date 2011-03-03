@@ -169,11 +169,9 @@ int main(int argc, char* argv[])
         outputDirForRelative += "/" ;
      }
      outputDirForRelative += outputDir ;
-     std::cout<<"plop "<<outputDirForRelative<<std::endl;
   }
   else
   {
-     std::cout<<"plop2"<<std::endl;
      outputDirForRelative = outputDir ;
      if( outputDirForRelative[ outputDirForRelative.size() - 1 ] != '/' )
      {
@@ -186,20 +184,19 @@ int main(int argc, char* argv[])
     std::string transformRelativePath ;
   if( transformationFile.compare( "" ) )
   {
-    std::cout<<"plop3"<<std::endl;
     std::string transformationFileRelative = itksys::SystemTools::GetRealPath( transformationFile.c_str() ) ;
     std::string transformRelativePath = itksys::SystemTools::RelativePath( outputDirForRelative.c_str() , transformationFileRelative.c_str() ) ;
+   std::cout<< transformRelativePath << std::endl;
   }
   else
   {
-     std::cout<<"plop4"<<std::endl;
      transformRelativePath = outputDirForRelative ;
   }
   std::string dataRelative = itksys::SystemTools::GetRealPath( data.c_str() ) ;
-  std::string inputRelativePath = itksys::SystemTools::RelativePath( outputDirForRelative.c_str() , dataRelative.c_str() ) ;
-  std::string templateFileRelative = itksys::SystemTools::GetRealPath( templateFile.c_str() ) ;
-  std::string templateDirForRelative = itksys::SystemTools::RelativePath( outputDirForRelative.c_str() , templateFileRelative.c_str() ) ;
-  std::cout<<templateDirForRelative<<std::endl;
+  //std::string inputRelativePath = itksys::SystemTools::RelativePath( outputDirForRelative.c_str() , dataRelative.c_str() ) ;
+  //std::string templateFileRelative = itksys::SystemTools::GetRealPath( templateFile.c_str() ) ;
+//  std::string templateDirForRelative = itksys::SystemTools::RelativePath( outputDirForRelative.c_str() , templateFileRelative.c_str() ) ;
+//  std::cout<<templateDirForRelative<<std::endl;
   std::string templateDir = GetDirectory( templateFile ) ;
   if( outputDir[ outputDir.size() - 1 ] == '/' )
   {
@@ -241,15 +238,15 @@ int main(int argc, char* argv[])
   }
   //ResampleDTI (log euclidean and original)  
   std::string pathlogEuclideanString = ResampleDTIlogEuclidean_PATH ;
-  if( logEuclidean )
+  if( nologEuclidean )
   {
     if( SetPath( pathlogEuclideanString , "ResampleDTIlogEuclidean" ) )
     {
-      logEuclidean = false ;
+      nologEuclidean = false ;
     }
   }
   std::string pathResampleDTIString = ResampleDTI_PATH ;
-  if( !logEuclidean )
+  if( !nologEuclidean )
   {
     if( SetPath( pathResampleDTIString , "ResampleDTI" ) )
     {
@@ -306,6 +303,12 @@ int main(int argc, char* argv[])
   {
      return EXIT_FAILURE ;
   }
+  //HistogramMatching
+  std::string pathHistogramMatchingString = HistogramMatching_PATH ;
+  if( SetPath( pathHistogramMatchingString , "HistogramMatching" ) )
+  {
+     return EXIT_FAILURE ;
+  }
   //get batchmake script directory
   std::string script = "echo('Starting BatchMake Script')\n" ;
 ////Set options/////////////////////
@@ -320,10 +323,12 @@ int main(int argc, char* argv[])
   script += SetOptionalString( pathResampleDTIString , "ResampleDTIPATH" ) ;
   script += SetOptionalString( pathResampleVolume2String , "ResampleVolume2PATH" ) ;
   script += SetOptionalString( pathDiffusionTensorEstimationString , "DiffusionTensorEstimationPATH" ) ;
+  script += SetOptionalString( pathHistogramMatchingString , "HistogramMatchingPATH" ) ;
   script += SetOptionalString( pathCreateMRMLString , "CreateMRMLPATH" ) ;
   script += SetOptionalString( transformRelativePath , "TransformRelativePATH" ) ;
-  script += SetOptionalString( inputRelativePath , "InputRelativePATH" ) ;
-  script += SetOptionalString( templateDirForRelative , "atlasRelativePATH" ) ;
+  script += SetOptionalString( initialTransform , "InitialTransform" ) ;
+//  script += SetOptionalString( inputRelativePath , "InputRelativePATH" ) ;
+//  script += SetOptionalString( templateDirForRelative , "atlasRelativePATH" ) ;
   script += "Set( INPUTDIR " + dir + " )\n" ;
   script += "Set( INPUT " + data + " )\n" ;
   script += "Set( EXT " + ext + " )\n" ;
@@ -349,8 +354,12 @@ int main(int argc, char* argv[])
   script += SetBOOL( computeFA , "COMPUTEFA" ) ;
   script += SetBOOL( computeMD , "COMPUTEMD" ) ;
   script += SetBOOL( computeColorFA , "COMPUTECOLORFA" ) ;
-  script += SetBOOL( logEuclidean , "LOG" ) ;
+  script += SetBOOL( computeRadial , "COMPUTERD" ) ;
+  script += SetBOOL( computeAxial , "COMPUTEAD" ) ;
+  script += SetBOOL( nologEuclidean , "NOLOG" ) ;
+  script += SetBOOL( copyInputs , "COPY_INPUTS" ) ;
   script += SetBOOL( scale , "SCALE" ) ;
+  script += SetOptionalString( rootName , "ROOTNAME" ) ;
   script += "Set( REGTYPE \'" + registrationType + "\' )\n" ;
   script += "Set( INTERPOLATION \'" + interpolationType + "\' )\n" ;
   script += "include( " ;
@@ -368,7 +377,7 @@ int main(int argc, char* argv[])
   file << script; 
   file.close();
   
-  
+
   
   // Create a progress manager gui
   // -------------------------

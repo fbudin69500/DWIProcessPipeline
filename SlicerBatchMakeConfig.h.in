@@ -14,3 +14,4 @@
 #define dtiprocess_PATH "@DTIPROCESSTOOL@"
 #define CreateMRML_PATH "@CREATEMRMLTOOL@"
 #define ImageMath_PATH "@ImageMathTOOL@"
+#define HistogramMatching_PATH "@HistogramMatchingTOOL@"

@@ -48,6 +48,13 @@
       <description>Directory where to save files</description>
       <default></default>
     </directory>
+    <string>
+      <name>rootName</name>
+      <label>Output files root name</label>
+      <longflag>rootName</longflag>
+      <description>rootname to use for files (otherwise uses input file name)</description>
+      <default></default>
+    </string>
   </parameters>
   <parameters advanced="true">
     <label>Additional images</label>
@@ -137,6 +144,14 @@
        <channel>input</channel>
        <default></default>
     </transform>
+    <transform fileExtensions=".mat">
+       <name>initialTransform</name>
+       <label>Initial transform Node (if transform is known)</label>
+       <flag>-i</flag>
+       <longflag>--initialTransform</longflag>
+       <channel>input</channel>
+       <default></default>
+    </transform>
   </parameters>
   <parameters advanced="true">
     <label>Post-processing</label>
@@ -161,6 +176,20 @@
       <longflag>computeColorFA</longflag> 
       <default>true</default>
     </boolean>
+    <boolean>
+      <name>computeRadial</name>
+      <description>Compute Radial Diffusivity (RD) from resampled DTI</description>
+      <label>Compute RD</label>
+      <longflag>computeRD</longflag> 
+      <default>true</default>
+    </boolean>
+    <boolean>
+      <name>computeAxial</name>
+      <description>Compute Axial Diffusivity (AD) from resampled DTI</description>
+      <label>Compute AD</label>
+      <longflag>computeAD</longflag>
+      <default>true</default>
+    </boolean>
   </parameters>
   <parameters advanced="true">
     <label>Advanced options</label>
@@ -173,10 +202,17 @@
       <default>false</default>
     </boolean>
     <boolean>
-      <name>logEuclidean</name>
-      <description>Use the log euclidean framework to resample the DTI</description>
-      <label>log-Euclidean</label>
-      <longflag>log</longflag> 
+      <name>nologEuclidean</name>
+      <description>Do not use the log euclidean framework to resample the DTI</description>
+      <label>nolog-Euclidean</label>
+      <longflag>nolog</longflag> 
+      <default>false</default>
+    </boolean>
+    <boolean>
+      <name>copyInputs</name>
+      <description>Copy the input images to the output directory</description>
+      <label>Copy Inputs</label>
+      <longflag>copy</longflag> 
       <default>true</default>
     </boolean>
     <string-enumeration>
