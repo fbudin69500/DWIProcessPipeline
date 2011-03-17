@@ -37,7 +37,7 @@
     <image type="scalar">
       <name>templateFile</name>
       <description>Template, also used a reference image to resample the images if transform is known</description>
-      <label>Template</label>
+      <label>Template/Reference</label>
       <channel>input</channel>
       <index>1</index>
     </image>

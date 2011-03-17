@@ -185,13 +185,14 @@ int main(int argc, char* argv[])
   if( transformationFile.compare( "" ) )
   {
     std::string transformationFileRelative = itksys::SystemTools::GetRealPath( transformationFile.c_str() ) ;
-    std::string transformRelativePath = itksys::SystemTools::RelativePath( outputDirForRelative.c_str() , transformationFileRelative.c_str() ) ;
-   std::cout<< transformRelativePath << std::endl;
+    transformRelativePath = itksys::SystemTools::RelativePath( outputDirForRelative.c_str() , transformationFileRelative.c_str() ) ;
+   std::cout<< "plop " << transformRelativePath << std::endl;
   }
   else
   {
      transformRelativePath = outputDirForRelative ;
   }
+  std::cout<< "relative path1: "<<transformRelativePath << std::endl;
   std::string dataRelative = itksys::SystemTools::GetRealPath( data.c_str() ) ;
   //std::string inputRelativePath = itksys::SystemTools::RelativePath( outputDirForRelative.c_str() , dataRelative.c_str() ) ;
   //std::string templateFileRelative = itksys::SystemTools::GetRealPath( templateFile.c_str() ) ;
@@ -325,6 +326,7 @@ int main(int argc, char* argv[])
   script += SetOptionalString( pathDiffusionTensorEstimationString , "DiffusionTensorEstimationPATH" ) ;
   script += SetOptionalString( pathHistogramMatchingString , "HistogramMatchingPATH" ) ;
   script += SetOptionalString( pathCreateMRMLString , "CreateMRMLPATH" ) ;
+  std::cout<< "relative path: "<<transformRelativePath << std::endl;
   script += SetOptionalString( transformRelativePath , "TransformRelativePATH" ) ;
   script += SetOptionalString( initialTransform , "InitialTransform" ) ;
 //  script += SetOptionalString( inputRelativePath , "InputRelativePATH" ) ;

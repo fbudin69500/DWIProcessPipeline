@@ -5,7 +5,7 @@ EndIf( ${INPUTTYPE} == 'DWI' || ${INPUTTYPE} == 'DTI' )
 
 GetFilename( TRANSFORMATIONFILE ${TRANSFORMATIONFILE} NAME )
 
-Set( MRMLCmd ${MRMLCmd} -t -f ${TransformRelativePATH}${TRANSFORMATIONFILE} -n Transform )
+Set( MRMLCmd ${MRMLCmd} -t -f ${TransformRelativePATH} -n Transform )
 
 If (${COMPUTEORIENTATION} == TRUE ) Then
   Set( MRMLCmd ${MRMLCmd} -v -f ${ORIENTED_IMAGE} )
@@ -83,11 +83,11 @@ If( ${INPUTTYPE} == 'DWI' || ${INPUTTYPE} == 'DTI' )
 
   If (${COMPUTEAD} == TRUE ) Then
      Set( AD ${RESAMPLED_IMAGE_TAG}_AD.nrrd )
-     Set( MRMLCmd ${MRMLCmd} -v -f ${AD} -y vector)
+     Set( MRMLCmd ${MRMLCmd} -v -f ${AD} )
   EndIf (${COMPUTEAD} == TRUE )
   If (${COMPUTERD} == TRUE ) Then
      Set( RD ${RESAMPLED_IMAGE_TAG}_RD.nrrd )
-     Set( MRMLCmd ${MRMLCmd} -v -f ${RD} -y vector)
+     Set( MRMLCmd ${MRMLCmd} -v -f ${RD} )
   EndIf (${COMPUTERD} == TRUE )
 
 
