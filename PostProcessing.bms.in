@@ -1,4 +1,4 @@
-#ResampleDTI
+#ResampledDTI
 GetFilename( RESAMPLED_IMAGE_TAG ${RESAMPLED_IMAGE} NAME_WITHOUT_EXTENSION )
 If (${COMPUTEFA} == TRUE ) Then
         echo ('Computation of FA')

@@ -15,3 +15,4 @@
 #define CreateMRML_PATH "@CREATEMRMLTOOL@"
 #define ImageMath_PATH "@ImageMathTOOL@"
 #define HistogramMatching_PATH "@HistogramMatchingTOOL@"
+#define MaskComputation_PATH "@MaskTOOL@"

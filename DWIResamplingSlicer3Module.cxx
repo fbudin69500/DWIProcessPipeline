@@ -238,17 +238,10 @@ int main(int argc, char* argv[])
     return EXIT_FAILURE ;
   }
   //ResampleDTI (log euclidean and original)  
-  std::string pathlogEuclideanString = ResampleDTIlogEuclidean_PATH ;
-  if( nologEuclidean )
+  std::string pathResampleDTIString = ResampleDTIlogEuclidean_PATH ;
+  if( nologEuclidean || SetPath( pathResampleDTIString , "ResampleDTIlogEuclidean" ) )
   {
-    if( SetPath( pathlogEuclideanString , "ResampleDTIlogEuclidean" ) )
-    {
-      nologEuclidean = false ;
-    }
-  }
-  std::string pathResampleDTIString = ResampleDTI_PATH ;
-  if( !nologEuclidean )
-  {
+    pathResampleDTIString = ResampleDTI_PATH ;
     if( SetPath( pathResampleDTIString , "ResampleDTI" ) )
     {
       return EXIT_FAILURE ;
@@ -259,11 +252,23 @@ int main(int argc, char* argv[])
   std::string pathManualImageOrientString = ComputeOrientation_PATH ;
   if( computeOrientation )
   {
+    if( SetPath( pathManualImageOrientString , "ManualImageOrient" ) )
+    {
+      return EXIT_FAILURE ;
+    }
+  }
+  if( computeOrientation || scale )
+  {
     if( SetPath( pathITKTransformToolsString , "ITKTransformTools" ) )
     {
       return EXIT_FAILURE ;
     }
-    if( SetPath( pathManualImageOrientString , "ManualImageOrient" ) )
+  }
+  //Compute mask
+  std::string pathMaskComputationString = MaskComputation_PATH ;
+  if( skullStrip )
+  {
+    if( SetPath( pathMaskComputationString , "MaskComputationWithThresholding" ) )
     {
       return EXIT_FAILURE ;
     }
@@ -316,7 +321,6 @@ int main(int argc, char* argv[])
   script += SetOptionalString( BatchMake_WRAPPED_APPLICATION_DIR , "SCRIPTDIR" ) ;
   script += SetOptionalString( pathITKTransformToolsString , "ITKTransformToolsPATH" ) ;
   script += SetOptionalString( pathImageMathString , "ImageMathPATH" ) ;
-  script += SetOptionalString( pathlogEuclideanString , "LogEuclideanPATH" ) ;
   script += SetOptionalString( pathdtiestimString , "dtiestimPATH" ) ;
   script += SetOptionalString( pathManualImageOrientString , "ManualImageOrientPATH" ) ;
   script += SetOptionalString( pathdtiprocessString , "dtiprocessPATH" ) ;
@@ -326,6 +330,7 @@ int main(int argc, char* argv[])
   script += SetOptionalString( pathDiffusionTensorEstimationString , "DiffusionTensorEstimationPATH" ) ;
   script += SetOptionalString( pathHistogramMatchingString , "HistogramMatchingPATH" ) ;
   script += SetOptionalString( pathCreateMRMLString , "CreateMRMLPATH" ) ;
+  script += SetOptionalString( pathMaskComputationString , "MaskComputationPATH" ) ;
   std::cout<< "relative path: "<<transformRelativePath << std::endl;
   script += SetOptionalString( transformRelativePath , "TransformRelativePATH" ) ;
   script += SetOptionalString( initialTransform , "InitialTransform" ) ;
@@ -358,7 +363,7 @@ int main(int argc, char* argv[])
   script += SetBOOL( computeColorFA , "COMPUTECOLORFA" ) ;
   script += SetBOOL( computeRadial , "COMPUTERD" ) ;
   script += SetBOOL( computeAxial , "COMPUTEAD" ) ;
-  script += SetBOOL( nologEuclidean , "NOLOG" ) ;
+  script += SetBOOL( skullStrip , "SKULLSTRIP" ) ;
   script += SetBOOL( copyInputs , "COPY_INPUTS" ) ;
   script += SetBOOL( scale , "SCALE" ) ;
   script += SetOptionalString( rootName , "ROOTNAME" ) ;

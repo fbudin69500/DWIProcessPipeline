@@ -202,6 +202,13 @@
       <default>false</default>
     </boolean>
     <boolean>
+      <name>skullStrip</name>
+      <description>Skull strip the image before registration</description>
+      <label>Skull strip</label>
+      <longflag>skullStrip</longflag> 
+      <default>false</default>
+    </boolean>
+    <boolean>
       <name>nologEuclidean</name>
       <description>Do not use the log euclidean framework to resample the DTI</description>
       <label>nolog-Euclidean</label>

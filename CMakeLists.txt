@@ -17,6 +17,7 @@ find_program(DTIPROCESSTOOL dtiprocess )
 find_program(CREATEMRMLTOOL CreateMRML )
 find_program(ImageMathTOOL ImageMath )
 find_program(HistogramMatchingTOOL HistogramMatching )
+find_program(MaskTOOL MaskComputationWithThresholding )
 
 # Set the name of the Slicer3 BatchMake module to be created
 set(Slicer3BatchModule DWIResamplingSlicer3Module)
@@ -64,6 +65,8 @@ configure_file( "${CMAKE_CURRENT_SOURCE_DIR}/PostProcessing.bms.in"
       "${BatchMake_WRAPPED_APPLICATION_DIR}/PostProcessing.bms" COPYONLY )
 configure_file( "${CMAKE_CURRENT_SOURCE_DIR}/CreateMRMLScene.bms.in"
       "${BatchMake_WRAPPED_APPLICATION_DIR}/CreateMRMLScene.bms" COPYONLY )
+configure_file( "${CMAKE_CURRENT_SOURCE_DIR}/MaskImage.bms.in"
+      "${BatchMake_WRAPPED_APPLICATION_DIR}/MaskImage.bms" COPYONLY )
 configure_file( "${CMAKE_CURRENT_SOURCE_DIR}/SlicerBatchMakeConfig.h.in"
       "${CMAKE_CURRENT_BINARY_DIR}/SlicerBatchMakeConfig.h")
 
