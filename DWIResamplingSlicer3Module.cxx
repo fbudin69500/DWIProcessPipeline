@@ -5,7 +5,7 @@
 #include <algorithm>
 #include "DWIResamplingSlicer3ModuleCLP.h"
 #include <fstream>
-#include <itkTransformFileReader.h>
+//#include <itkTransformFileReader.h>
 #include <itksys/SystemTools.hxx>
 #include <itksys/Process.h>
 #include "SlicerBatchMakeConfig.h"
@@ -115,8 +115,8 @@ std::vector< std::string > SplitPath( std::string path )
 std::string RelativePath( std::string ReferencePath , std::string path )
 {
    std::string rPath ;
-   std::vector< string > rsplitPath = SplitPath( ReferencePath ) ;
-   std::vector< string > splitPath = SplitPath( path ) ;
+   std::vector< std::string > rsplitPath = SplitPath( ReferencePath ) ;
+   std::vector< std::string > splitPath = SplitPath( path ) ;
    unsigned int count = 0 ;
    for( unsigned int i = 0 ; i < std::min( rsplitPath.size() , splitPath.size() ) ; i++ )
    {
