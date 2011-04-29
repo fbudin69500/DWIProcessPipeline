@@ -70,11 +70,11 @@ std::string GetDirectory( std::string &dwi )
   return "." ;
 }
 
-int SetPath( std::string &pathString , const char* name )
+int SetPath( std::string &pathString , const char* name , std::vector< std::string >  path_vec )
 {
   if( !pathString.substr(pathString.size() - 10 , 9 ).compare( "-NOTFOUND" ) )
   {
-    pathString= itksys::SystemTools::FindProgram( name ) ;
+    pathString= itksys::SystemTools::FindProgram( name , path_vec ) ;
     if( !pathString.compare( "" ) )
     {
       std::cerr << name << " is missing or its PATH is not set" << std::endl ;
@@ -90,6 +90,12 @@ int SetPath( std::string &pathString , const char* name )
 int main(int argc, char* argv[])
 {
   PARSE_ARGS;
+  char* _scriptDirectory = getenv("DWIResamplingSlicer3ModuleDIR") ;
+  std::vector< std::string > path_vec ;
+  if( _scriptDirectory != NULL )
+  {
+     path_vec.push_back( _scriptDirectory ) ;
+  }
   std::string ext ;
   std::string dir ;
   data = itksys::SystemTools::ConvertToUnixOutputPath( data.c_str() ) ;
@@ -175,17 +181,17 @@ int main(int argc, char* argv[])
   }
   //Find tools
   //ResampleVolume2
-  std::string pathResampleVolume2String= itksys::SystemTools::FindProgram("ResampleVolume2");
-  if( SetPath( pathResampleVolume2String , "ResampleVolume2" ) )
+  std::string pathResampleVolume2String = ResampleVolume2_PATH ;
+  if( SetPath( pathResampleVolume2String , "ResampleVolume2" , path_vec ) )
   {
     return EXIT_FAILURE ;
   }
   //ResampleDTI (log euclidean and original)  
   std::string pathResampleDTIString = ResampleDTIlogEuclidean_PATH ;
-  if( nologEuclidean || SetPath( pathResampleDTIString , "ResampleDTIlogEuclidean" ) )
+  if( nologEuclidean || SetPath( pathResampleDTIString , "ResampleDTIlogEuclidean" , path_vec ) )
   {
     pathResampleDTIString = ResampleDTI_PATH ;
-    if( SetPath( pathResampleDTIString , "ResampleDTI" ) )
+    if( SetPath( pathResampleDTIString , "ResampleDTI" , path_vec ) )
     {
       return EXIT_FAILURE ;
     }
@@ -195,14 +201,14 @@ int main(int argc, char* argv[])
   std::string pathManualImageOrientString = ComputeOrientation_PATH ;
   if( computeOrientation )
   {
-    if( SetPath( pathManualImageOrientString , "ManualImageOrient" ) )
+     if( SetPath( pathManualImageOrientString , "ManualImageOrient" , path_vec ) )
     {
       return EXIT_FAILURE ;
     }
   }
   if( computeOrientation || scale )
   {
-    if( SetPath( pathITKTransformToolsString , "ITKTransformTools" ) )
+     if( SetPath( pathITKTransformToolsString , "ITKTransformTools" , path_vec ) )
     {
       return EXIT_FAILURE ;
     }
@@ -211,57 +217,64 @@ int main(int argc, char* argv[])
   std::string pathMaskComputationString = MaskComputation_PATH ;
   if( skullStrip )
   {
-    if( SetPath( pathMaskComputationString , "MaskComputationWithThresholding" ) )
+     if( SetPath( pathMaskComputationString , "MaskComputationWithThresholding" , path_vec ) )
     {
       return EXIT_FAILURE ;
     }
   }
   //Register Images
   std::string pathRegisterImagesString = RegisterImages_PATH ;
-  if( SetPath( pathRegisterImagesString , "RegisterImages" ) )
+  if( SetPath( pathRegisterImagesString , "RegisterImages" , path_vec ) )
   {
     return EXIT_FAILURE ;
   }
   //dtiestim
   std::string pathdtiestimString = dtiestim_PATH ;
-  if( SetPath( pathdtiestimString , "dtiestim" ) )
+  if( SetPath( pathdtiestimString , "dtiestim" , path_vec ) )
   {
     return EXIT_FAILURE ;
   }
   //dtiprocess
   std::string pathdtiprocessString = dtiprocess_PATH ;
-  if( SetPath( pathdtiprocessString , "dtiprocess" ) )
+  if( SetPath( pathdtiprocessString , "dtiprocess" , path_vec ) )
   {
     return EXIT_FAILURE ;
   }
   //DiffusionTensorEstimation
   std::string pathDiffusionTensorEstimationString = DiffusionTensorEstimation_PATH ;
-  if( SetPath( pathDiffusionTensorEstimationString , "DiffusionTensorEstimation" ) )
+  if( SetPath( pathDiffusionTensorEstimationString , "DiffusionTensorEstimation" , path_vec ) )
   {
     return EXIT_FAILURE ;
   }
   //ImageMath
   std::string pathImageMathString = ImageMath_PATH ;
-  if( SetPath( pathImageMathString , "ImageMath" ) )
+  if( SetPath( pathImageMathString , "ImageMath" , path_vec ) )
   {
     return EXIT_FAILURE ;
   }
   //CreateMRML
   std::string pathCreateMRMLString = CreateMRML_PATH ;
-  if( SetPath( pathCreateMRMLString , "CreateMRML" ) )
+  if( SetPath( pathCreateMRMLString , "CreateMRML" , path_vec ) )
   {
      return EXIT_FAILURE ;
   }
   //HistogramMatching
   std::string pathHistogramMatchingString = HistogramMatching_PATH ;
-  if( SetPath( pathHistogramMatchingString , "HistogramMatching" ) )
+  if( SetPath( pathHistogramMatchingString , "HistogramMatching" , path_vec ) )
   {
      return EXIT_FAILURE ;
   }
   //get batchmake script directory
   std::string script = "echo('Starting BatchMake Script')\n" ;
 ////Set options/////////////////////
-  script += SetOptionalString( BatchMake_WRAPPED_APPLICATION_DIR , "SCRIPTDIR" ) ;
+  if( _scriptDirectory == NULL )
+  {
+    script += SetOptionalString( BatchMake_WRAPPED_APPLICATION_DIR , "SCRIPTDIR" ) ;
+  }
+  else
+  {
+     script += SetOptionalString( _scriptDirectory , "SCRIPTDIR" ) ;
+  }
   script += SetOptionalString( pathITKTransformToolsString , "ITKTransformToolsPATH" ) ;
   script += SetOptionalString( pathImageMathString , "ImageMathPATH" ) ;
   script += SetOptionalString( pathdtiestimString , "dtiestimPATH" ) ;
