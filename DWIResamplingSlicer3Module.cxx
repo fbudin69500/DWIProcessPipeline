@@ -84,65 +84,8 @@ int SetPath( std::string &pathString , const char* name )
   return 0 ;
 }
 
-std::vector< std::string > SplitPath( std::string path )
-{
-   size_t found = 0 ;
-   bool isDir = itksys::SystemTools::FileIsDirectory( path.c_str() ) ;
-   std::vector< std::string > split ;
-   do
-   {
-     std::cout<<path<<std::endl;
-     found = path.find('/') ;
-     if( found != std::string::npos )
-     {
-       std::string dir = path.substr( 0 , found ) ;
-       if( dir.compare( "." ) )
-       {
-          std::cout<<dir<<std::endl;
-          split.push_back( dir ) ;
-       }
-       path.erase( path.begin() , path.begin() + found + 1 ) ;
-     }
-   }
-   while( found != std::string::npos ) ;
-   if( isDir )
-   {
-      split.push_back( path ) ;
-   }
-   return split ;
-}
 
-std::string RelativePath( std::string ReferencePath , std::string path )
-{
-   std::string rPath ;
-   std::vector< std::string > rsplitPath = SplitPath( ReferencePath ) ;
-   std::vector< std::string > splitPath = SplitPath( path ) ;
-   unsigned int count = 0 ;
-   for( unsigned int i = 0 ; i < std::min( rsplitPath.size() , splitPath.size() ) ; i++ )
-   {
-      if( !rsplitPath[ i ].compare( splitPath[ i ] ) )
-      {
-         count++ ;
-      }
-   }
-   for( unsigned int i = count ; i < rsplitPath.size() ; i++ )
-   {
-      rPath += "../" ;
-   }
-   for( unsigned int i = count ; i < splitPath.size() ; i++ )
-   {
-      rPath += splitPath[ i ] + "/" ;
-   }
-   if( !rPath.compare( "" ) )
-   {
-      rPath = "." ;
-   }
-   else
-   {
-      rPath.resize( rPath.size() - 1 ) ;
-   }
-   return rPath ;
-}
+
 
 int main(int argc, char* argv[])
 {
