@@ -3,6 +3,8 @@ CMAKE_POLICY(VERSION 2.8)
 
 project (DWIResamplingSlicer3Module)
 
+include(CMake/CMakeCommonExternalDefinitions.cmake)
+
 IF(CMAKE_COMPILER_2005)
   ADD_DEFINITIONS(-D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE)
 ENDIF(CMAKE_COMPILER_2005)
@@ -27,14 +29,22 @@ IF (Slicer3_FOUND)
     message( FATAL_ERROR "ITK not found. Please set ITK_DIR. " )
   endif(NOT ITK_FOUND )
 ELSE (Slicer3_FOUND)
-  find_package(ITK REQUIRED)
-  include(${ITK_USE_FILE})
-  find_package(BatchMake REQUIRED)
-  include(${BatchMake_USE_FILE})
-  find_package(GenerateCLP REQUIRED)
-  if(GenerateCLP_FOUND)
-    include(${GenerateCLP_USE_FILE})
-  endif(GenerateCLP_FOUND)
+  include(ExternalProject)
+  if(CMAKE_EXTRA_GENERATOR)
+    set(gen "${CMAKE_EXTRA_GENERATOR} - ${CMAKE_GENERATOR}")
+  else()
+    set(gen "${CMAKE_GENERATOR}")
+  endif()
+  #PACKAGE_NEEDS_ITK( ${CMAKE_GENERATOR} )
+  OPTION(OPT_USE_SYSTEM_BatchMake "Use the system's BatchMake library." OFF)
+  if(OPT_USE_SYSTEM_BatchMake)
+    find_package(BatchMake REQUIRED)
+    include(${BatchMake_USE_FILE})
+  else(OPT_USE_SYSTEM_BatchMake)
+    include(CMake/External_BatchMake.cmake)
+  endif(OPT_USE_SYSTEM_BatchMake)
+  #PACKAGE_NEEDS_SlicerExecutionModel( ${CMAKE_GENERATOR} )
+
 ENDIF (Slicer3_FOUND)
 
 #Find tools
@@ -148,11 +158,6 @@ generateclp(Slicer3BatchModule_SOURCE   ${Slicer3BatchModule}.xml )
 #Do not compile as a library. We need the image files to be saved on the hard drive.
 add_executable( ${Slicer3BatchModule} ${Slicer3BatchModule_SOURCE} )
 target_link_libraries( ${Slicer3BatchModule} BatchMakeLib )
-
-#FIND_PACKAGE(Subversion)
-#IF(NOT Subversion_FOUND)
-#  MESSAGE(FATAL_ERROR "error: Install SVN and try to re-configure")
-#ENDIF()
 
 
 #--------COMPILE DWIResamplingSlicer3Module AS STANDALONE PACKAGE--------
@@ -284,6 +289,27 @@ IF(COMPILE_EXTERNAL_PROJECTS)
       INSTALL_COMMAND ""
       )
   ENDIF(COMPILE_EXTERNAL_MaskComputationWithThresholding)
+
+  OPTION(COMPILE_EXTERNAL_Sources "Compile External Sources" OFF)
+  IF(COMPILE_EXTERNAL_Sources)
+    set(proj Sources)
+      ExternalProject_Add(${proj}
+        URL ${CMAKE_SOURCE_DIR}/*
+        SOURCE_DIR ${proj}
+        BINARY_DIR ${proj}-build
+        DEPENDS  ${ITK_DEPEND} ${SlicerExecutionModel_DEPEND} BatchMake
+        CMAKE_GENERATOR ${gen}
+        CMAKE_ARGS
+          ${LOCAL_CMAKE_BUILD_OPTIONS}
+          -DSlicer3_FOUND:BOOL=TRUE
+          -DSlicer3_USE_FILE:PATH=${Slicer3_USE_FILE}
+          -DSlicer3_DIR:PATH=${Slicer3_DIR}
+          -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
+          -DEXECUTABLE_OUTPUT_PATH:PATH=${DWIResamplingSlicer3Module_BINARY_DIR}/bin
+      INSTALL_COMMAND ""
+      )
+  ENDIF(COMPILE_EXTERNAL_Sources)
+
 ENDIF(COMPILE_EXTERNAL_PROJECTS)
 
 
