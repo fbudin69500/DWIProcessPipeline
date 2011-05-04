@@ -51,6 +51,10 @@ ELSE (Slicer3_FOUND)
   mark_as_advanced( BUILD_SHARED_LIBS )
 ENDIF (Slicer3_FOUND)
 
+if( ${OPT_USE_SYSTEM_ITK} AND NOT ${ITK_USE_REVIEW} )
+  set( OPT_USE_SYSTEM_ITK OFF )
+  message( SEND_ERROR "ITK was compiled with ITK_USE_REVIEW set to off. Please recompile it setting this option to ON or set OPT_USE_SYSTEM_ITK to OFF" )
+endif( ${OPT_USE_SYSTEM_ITK} AND NOT ${ITK_USE_REVIEW} )
 
 include( Source/FindTools.cmake )
 

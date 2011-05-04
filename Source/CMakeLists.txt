@@ -42,22 +42,10 @@ ELSE (Slicer3_FOUND)
 ENDIF (Slicer3_FOUND)
 
 # Configure a header
-set(BatchMake_WRAPPED_APPLICATION_DIR ${EXECUTABLE_OUTPUT_PATH})
 
-configure_file( "${CMAKE_CURRENT_SOURCE_DIR}/BatchMakeScript.bms.in"
-      "${BatchMake_WRAPPED_APPLICATION_DIR}/BatchMakeScript.bms" COPYONLY )
-configure_file( "${CMAKE_CURRENT_SOURCE_DIR}/Prepare.bms.in"
-      "${BatchMake_WRAPPED_APPLICATION_DIR}/Prepare.bms" COPYONLY )
-configure_file( "${CMAKE_CURRENT_SOURCE_DIR}/Registration.bms.in"
-      "${BatchMake_WRAPPED_APPLICATION_DIR}/Registration.bms" COPYONLY )
-configure_file( "${CMAKE_CURRENT_SOURCE_DIR}/Transform.bms.in"
-      "${BatchMake_WRAPPED_APPLICATION_DIR}/Transform.bms" COPYONLY )
-configure_file( "${CMAKE_CURRENT_SOURCE_DIR}/PostProcessing.bms.in"
-      "${BatchMake_WRAPPED_APPLICATION_DIR}/PostProcessing.bms" COPYONLY )
-configure_file( "${CMAKE_CURRENT_SOURCE_DIR}/CreateMRMLScene.bms.in"
-      "${BatchMake_WRAPPED_APPLICATION_DIR}/CreateMRMLScene.bms" COPYONLY )
-configure_file( "${CMAKE_CURRENT_SOURCE_DIR}/MaskImage.bms.in"
-      "${BatchMake_WRAPPED_APPLICATION_DIR}/MaskImage.bms" COPYONLY )
+FILE( GLOB list_files ${CMAKE_CURRENT_SOURCE_DIR}/*.bms.in )
+FILE( COPY ${list_files} DESTINATION ${EXECUTABLE_OUTPUT_PATH} )
+
 configure_file( "${CMAKE_CURRENT_SOURCE_DIR}/SlicerBatchMakeConfig.h.in"
       "${CMAKE_CURRENT_BINARY_DIR}/SlicerBatchMakeConfig.h")
 
