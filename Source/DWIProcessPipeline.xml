@@ -4,7 +4,7 @@
   Batch Processing
   </category>
   <title>
-  Mice DTI Resampling Batchmake 2
+    DWI Process Pipeline
   </title>
   <description>
   Starts a pipeline from a DWI, computes the DTI, register it using a scalar image, and computes the new scalar image from the registered DTI

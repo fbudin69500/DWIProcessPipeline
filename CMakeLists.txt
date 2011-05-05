@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 CMAKE_POLICY(VERSION 2.8)
 
-project (DWIResamplingSlicer3Module-Gen)
+project (DWIProcessPipeline-Gen)
 
 set( CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_SOURCE_DIR}/CMake" )
 
@@ -11,10 +11,10 @@ IF(CMAKE_COMPILER_2005)
   ADD_DEFINITIONS(-D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE)
 ENDIF(CMAKE_COMPILER_2005)
 
-IF (${CMAKE_SOURCE_DIR} STREQUAL ${DWIResamplingSlicer3Module-Gen_SOURCE_DIR})
-  SET (LIBRARY_OUTPUT_PATH ${DWIResamplingSlicer3Module-Gen_BINARY_DIR}/lib CACHE PATH "Single output directory for building all libraries.")
-  SET (EXECUTABLE_OUTPUT_PATH ${DWIResamplingSlicer3Module-Gen_BINARY_DIR}/bin CACHE PATH "Single output directory for building all executables.")
-ENDIF (${CMAKE_SOURCE_DIR} STREQUAL ${DWIResamplingSlicer3Module-Gen_SOURCE_DIR})
+IF (${CMAKE_SOURCE_DIR} STREQUAL ${DWIProcessPipeline-Gen_SOURCE_DIR})
+  SET (LIBRARY_OUTPUT_PATH ${DWIProcessPipeline-Gen_BINARY_DIR}/lib CACHE PATH "Single output directory for building all libraries.")
+  SET (EXECUTABLE_OUTPUT_PATH ${DWIProcessPipeline-Gen_BINARY_DIR}/bin CACHE PATH "Single output directory for building all executables.")
+ENDIF (${CMAKE_SOURCE_DIR} STREQUAL ${DWIProcessPipeline-Gen_SOURCE_DIR})
 
 
 FIND_PACKAGE(Slicer3 QUIET NO_DEFAULT_PATH)

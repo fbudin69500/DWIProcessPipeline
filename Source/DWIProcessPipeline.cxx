@@ -3,12 +3,12 @@
 #include <bmScriptParser.h>
 
 #include <algorithm>
-#include "DWIResamplingSlicer3ModuleCLP.h"
+#include "DWIProcessPipelineCLP.h"
 #include <fstream>
 //#include <itkTransformFileReader.h>
 #include <itksys/SystemTools.hxx>
 #include <itksys/Process.h>
-#include "SlicerBatchMakeConfig.h"
+#include "DWIProcessPipelineConfig.h"
 #include <sys/param.h>
 
 std::string SetOptionalString( std::string var ,
@@ -90,7 +90,7 @@ int SetPath( std::string &pathString , const char* name , std::vector< std::stri
 int main(int argc, char* argv[])
 {
   PARSE_ARGS;
-  char* _scriptDirectory = getenv("DWIResamplingSlicer3ModuleDIR") ;
+  char* _scriptDirectory = getenv("DWIProcessPipelineDIR") ;
   std::vector< std::string > path_vec ;
   if( _scriptDirectory != NULL )
   {
