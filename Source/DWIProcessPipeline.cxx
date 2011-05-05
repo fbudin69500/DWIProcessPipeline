@@ -112,8 +112,6 @@ int main(int argc, char* argv[])
   {
      char path[MAXPATHLEN] ;
      getcwd(path, MAXPATHLEN) ;
-     std::cout<<MAXPATHLEN<<std::endl;
-     std::cout<<path<<std::endl;
      outputDirForRelative = path ;
      if( outputDirForRelative[ outputDirForRelative.size() - 1 ] != '/' )
      {
@@ -128,23 +126,19 @@ int main(int argc, char* argv[])
      {
         outputDirForRelative += "/" ;
      }
-     std::cout<<"already relative: "<<outputDirForRelative<<std::endl;
      //outputDirForRelative += "addition" ;
   }
   outputDirForRelative = itksys::SystemTools::GetRealPath( outputDirForRelative.c_str() ) ;
-  std::cout<< outputDirForRelative << std::endl ;
-    std::string transformRelativePath ;
+  std::string transformRelativePath ;
   if( transformationFile.compare( "" ) )
   {
     std::string transformationFileRelative = itksys::SystemTools::GetRealPath( transformationFile.c_str() ) ;
     transformRelativePath = itksys::SystemTools::RelativePath( outputDirForRelative.c_str() , transformationFileRelative.c_str() ) ;
-   std::cout<< "plop " << transformRelativePath << std::endl;
   }
   else
   {
      transformRelativePath = outputDirForRelative ;
   }
-  std::cout<< "relative path1: "<<transformRelativePath << std::endl;
   std::string dataRelative = itksys::SystemTools::GetRealPath( data.c_str() ) ;
   //std::string inputRelativePath = itksys::SystemTools::RelativePath( outputDirForRelative.c_str() , dataRelative.c_str() ) ;
   //std::string templateFileRelative = itksys::SystemTools::GetRealPath( templateFile.c_str() ) ;
@@ -290,7 +284,6 @@ int main(int argc, char* argv[])
   script += SetOptionalString( pathHistogramMatchingString , "HistogramMatchingPATH" ) ;
   script += SetOptionalString( pathCreateMRMLString , "CreateMRMLPATH" ) ;
   script += SetOptionalString( pathMaskComputationString , "MaskComputationPATH" ) ;
-  std::cout<< "relative path: "<<transformRelativePath << std::endl;
   script += SetOptionalString( transformRelativePath , "TransformRelativePATH" ) ;
   script += SetOptionalString( initialTransform , "InitialTransform" ) ;
 //  script += SetOptionalString( inputRelativePath , "InputRelativePATH" ) ;
@@ -338,7 +331,6 @@ int main(int argc, char* argv[])
   itksys::SystemTools::MakeDirectory( outputDir.c_str() ) ;
   std::string scriptFile = outputDir
                            + "/DTIPipeline.bms";
-  std::cout<<scriptFile<<std::endl;
   std::ofstream file( scriptFile.c_str() );
   file << script; 
   file.close();

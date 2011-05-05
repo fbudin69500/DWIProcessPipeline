@@ -43,7 +43,7 @@ ENDIF (Slicer3_FOUND)
 
 # Configure a header
 
-FILE( GLOB list_files ${CMAKE_CURRENT_SOURCE_DIR}/*.bms.in )
+FILE( GLOB list_files ${CMAKE_CURRENT_SOURCE_DIR}/*.bms )
 FILE( COPY ${list_files} DESTINATION ${EXECUTABLE_OUTPUT_PATH} )
 
 # Set the name of the Slicer3 BatchMake module to be created

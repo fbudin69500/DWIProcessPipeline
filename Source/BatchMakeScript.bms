@@ -25,6 +25,7 @@ else( ${INPUTTYPE} == 'DWI' )
   Endif( ${INPUTTYPE} == 'DTI' )
 Endif( ${INPUTTYPE} == 'DWI' )
 
+echo( ${TRANSFORMATIONFILE})
 echo(${REGTYPE})
 include( Prepare.bms )
 If( ${TRANSFORMATIONFILE} == '' )
