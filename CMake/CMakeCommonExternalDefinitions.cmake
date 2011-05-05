@@ -142,3 +142,20 @@ macro(PACKAGE_NEEDS_SlicerExecutionModel gen)
   endif()
 endmacro()
 
+#-----------------------------------------------------------------------------
+# Get and build BatchMake
+##  Build the BatchMake Once, and let all derived project use the same version
+
+macro(PACKAGE_NEEDS_BatchMake gen)
+  set(packageToCheck BatchMake)
+    OPTION(OPT_USE_SYSTEM_${packageToCheck} "Use the system's ${packageToCheck} library." OFF)
+  if(OPT_USE_SYSTEM_BatchMake)
+    find_package(BatchMake REQUIRED)
+    include(${BatchMake_USE_FILE})
+    set(BatchMake_DEPEND "")
+  else(OPT_USE_SYSTEM_BatchMake)
+    include(External_BatchMake)
+    set(BatchMake_DIR ${CMAKE_CURRENT_BINARY_DIR}/BatchMake-build)
+    set(BatchMake_DEPEND BatchMake )
+  endif(OPT_USE_SYSTEM_BatchMake)
+endmacro()

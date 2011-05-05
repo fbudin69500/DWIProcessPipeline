@@ -22,6 +22,4 @@ ExternalProject_Add(${proj}
     -DUSE_SPLASHSCREEN:BOOL=OFF
     -DITK_DIR:FILEPATH=${ITK_DIR}
   INSTALL_COMMAND ""
-  DEPENDS 
-    ${BatchMake_DEPENDENCIES}
 )
