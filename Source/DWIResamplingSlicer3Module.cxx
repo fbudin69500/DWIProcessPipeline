@@ -72,7 +72,7 @@ std::string GetDirectory( std::string &dwi )
 
 int SetPath( std::string &pathString , const char* name , std::vector< std::string >  path_vec )
 {
-  if( !pathString.substr(pathString.size() - 10 , 9 ).compare( "-NOTFOUND" ) )
+  if( pathString.empty() || !pathString.substr(pathString.size() - 10 , 9 ).compare( "-NOTFOUND" ) )
   {
     pathString= itksys::SystemTools::FindProgram( name , path_vec ) ;
     if( !pathString.compare( "" ) )
@@ -112,6 +112,8 @@ int main(int argc, char* argv[])
   {
      char path[MAXPATHLEN] ;
      getcwd(path, MAXPATHLEN) ;
+     std::cout<<MAXPATHLEN<<std::endl;
+     std::cout<<path<<std::endl;
      outputDirForRelative = path ;
      if( outputDirForRelative[ outputDirForRelative.size() - 1 ] != '/' )
      {
@@ -126,6 +128,7 @@ int main(int argc, char* argv[])
      {
         outputDirForRelative += "/" ;
      }
+     std::cout<<"already relative: "<<outputDirForRelative<<std::endl;
      //outputDirForRelative += "addition" ;
   }
   outputDirForRelative = itksys::SystemTools::GetRealPath( outputDirForRelative.c_str() ) ;

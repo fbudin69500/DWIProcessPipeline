@@ -2,7 +2,7 @@
  * Configuration file from CMake to the module using BatchMake 
  */
 
-#define BatchMake_WRAPPED_APPLICATION_DIR "@BatchMake_WRAPPED_APPLICATION_DIR@"
+#define BatchMake_WRAPPED_APPLICATION_DIR "@EXECUTABLE_OUTPUT_PATH@"
 #define ResampleDTIlogEuclidean_PATH "@RESAMPLEDTILOGEUCLIDEANTOOL@"
 #define ResampleDTI_PATH "@RESAMPLEDTITOOL@"
 #define RegisterImages_PATH "@REGISTERIMAGESTOOL@"
