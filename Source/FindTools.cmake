@@ -22,7 +22,7 @@ macro( FindExecutableMacro path name extra)
   find_program(${path} ${name} )
   if(NOT ${path} )
     message( STATUS "${name} not found. CMake external used to download it and compile it" )
-    set( ${path} ${DWIResamplingSlicer3Module_BINARY_DIR}/bin/${name} )
+    set( ${path} ${EXECUTABLE_OUTPUT_PATH}/${name} )
     set( ${extra} ON )
   else(NOT ${path} )
     set( ${extra} OFF )
@@ -46,7 +46,7 @@ if(NOT CREATEMRMLTOOL )
   IF(Slicer3_FOUND)
     message( STATUS "CreateMRML not found. CMake external used to download it and compile it" )
     set( CreateMRMLexternal ON )
-    set( CREATEMRMLTOOL ${Slicer3_HOME}/${Slicer3_INSTALL_PLUGINS_BIN_DIR}/CreateMRML )
+    set( CREATEMRMLTOOL ${EXECUTABLE_OUTPUT_PATH}/CreateMRML )
   else(Slicer3_FOUND)
     message( WARNING "CreateMRML not found and will not be downloaded and compiled. Set path if already on the system or manually download and install it from here: git://github.com/booboo69500/CreateMRML.git" )
     set( CreateMRMLexternal OFF )
@@ -61,7 +61,7 @@ macro( FindDtiExecutableMacro path name extra)
     if( ${ITK_USE_REVIEW} )
       message( STATUS "${name} not found. CMake external used to download it and compile it" )
       set( ${extra} ON )
-      set( ${path} ${DWIResamplingSlicer3Module_BINARY_DIR}/bin/${name} )
+      set( ${path} ${EXECUTABLE_OUTPUT_PATH}/${name} )
     else( ${ITK_USE_REVIEW} )
       message( WARNING "${name} not found and will not be downloaded and compiled. ITK should be compiled with ITK_USE_REVIEW set to ON" )
     endif( ${ITK_USE_REVIEW} )
@@ -106,6 +106,7 @@ if( USE_LOG_EUCLIDEAN )
         -DEXECUTABLE_OUTPUT_PATH:PATH=${EXECUTABLE_OUTPUT_PATH}
       INSTALL_COMMAND ""
     )
+  set( RESAMPLEDTILOGEUCLIDEANTOOL ${EXECUTABLE_OUTPUT_PATH}/ResampleDTIlogEuclidean )
   ENDIF(COMPILE_EXTERNAL_ResampleDTIlogEuclidean)
 endif( USE_LOG_EUCLIDEAN )
 
@@ -126,6 +127,7 @@ IF(COMPILE_EXTERNAL_ImageMath)
       -DEXECUTABLE_OUTPUT_PATH:PATH=${EXECUTABLE_OUTPUT_PATH}
     INSTALL_COMMAND ""
   )
+set( ImageMathTOOL ${EXECUTABLE_OUTPUT_PATH}/ImageMath )
 ENDIF(COMPILE_EXTERNAL_ImageMath)
 
 OPTION(COMPILE_EXTERNAL_ITKTransformTools "Compile External ITKTransformTools" ${COMPILE_ITKTransformTools} )
@@ -145,6 +147,7 @@ IF(COMPILE_EXTERNAL_ITKTransformTools)
       -DEXECUTABLE_OUTPUT_PATH:PATH=${EXECUTABLE_OUTPUT_PATH}
     INSTALL_COMMAND ""
   )
+set( ITKTRANSFORMTOOLSTOOL ${EXECUTABLE_OUTPUT_PATH}/ITKTransformTools )
 ENDIF(COMPILE_EXTERNAL_ITKTransformTools)
 
 OPTION(COMPILE_EXTERNAL_CreateMRML "Compile External CreateMRML" ${CreateMRMLexternal})
@@ -164,6 +167,7 @@ IF(COMPILE_EXTERNAL_CreateMRML)
       -DEXECUTABLE_OUTPUT_PATH:PATH=${EXECUTABLE_OUTPUT_PATH}
     INSTALL_COMMAND ""
   )
+set( CREATEMRMLTOOL ${EXECUTABLE_OUTPUT_PATH}/CreateMRML )
 ENDIF(COMPILE_EXTERNAL_CreateMRML)
 
 OPTION(COMPILE_EXTERNAL_dtiprocess "Compile External dtiprocessToolkit" ${COMPILE_DTIPROCESS} )
@@ -192,6 +196,8 @@ IF(COMPILE_EXTERNAL_dtiprocess)
       -DCMAKE_RUNTIME_OUTPUT_DIRECTORY:PATH=${EXECUTABLE_OUTPUT_PATH}
     INSTALL_COMMAND ""
   )
+set( DTIPROCESSTOOL ${EXECUTABLE_OUTPUT_PATH}/dtiprocess )
+set( DTIESTIMTOOL ${EXECUTABLE_OUTPUT_PATH}/dtiestim )
 ENDIF(COMPILE_EXTERNAL_dtiprocess)
 
 OPTION(COMPILE_EXTERNAL_ManualImageOrient "Compile External ManualImageOrient" ${ManualImageOrientexternal})
@@ -213,6 +219,7 @@ IF(COMPILE_EXTERNAL_ManualImageOrient)
       -DEXECUTABLE_OUTPUT_PATH:PATH=${EXECUTABLE_OUTPUT_PATH}
     INSTALL_COMMAND ""
   )
+set( COMPUTEORIENTATIONTOOL ${EXECUTABLE_OUTPUT_PATH}/ManualImageOrient )
 ENDIF(COMPILE_EXTERNAL_ManualImageOrient)
 
 OPTION(COMPILE_EXTERNAL_MaskComputationWithThresholding "Compile External MaskComputationWithThresholding" ${MaskTOOLexternal})
@@ -234,4 +241,5 @@ IF(COMPILE_EXTERNAL_MaskComputationWithThresholding)
       -DEXECUTABLE_OUTPUT_PATH:PATH=${EXECUTABLE_OUTPUT_PATH}
     INSTALL_COMMAND ""
   )
+set( MaskTOOL ${EXECUTABLE_OUTPUT_PATH}/MaskComputationWithThresholding )
 ENDIF(COMPILE_EXTERNAL_MaskComputationWithThresholding)

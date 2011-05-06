@@ -16,6 +16,10 @@ IF (${CMAKE_SOURCE_DIR} STREQUAL ${DWIProcessPipeline-Gen_SOURCE_DIR})
   SET (EXECUTABLE_OUTPUT_PATH ${DWIProcessPipeline-Gen_BINARY_DIR}/bin CACHE PATH "Single output directory for building all executables.")
 ENDIF (${CMAKE_SOURCE_DIR} STREQUAL ${DWIProcessPipeline-Gen_SOURCE_DIR})
 
+if( NOT EXECUTABLE_OUTPUT_PATH )
+  SET (EXECUTABLE_OUTPUT_PATH ${DWIProcessPipeline-Gen_BINARY_DIR}/bin CACHE PATH "Single output directory for building all executables.")
+  message( WARNING "EXECUTABLE_OUTPUT_PATH was not set. Set to ${DWIProcessPipeline-Gen_BINARY_DIR}/bin" )
+endif( NOT EXECUTABLE_OUTPUT_PATH )
 
 FIND_PACKAGE(Slicer3 QUIET NO_DEFAULT_PATH)
 IF (Slicer3_FOUND)

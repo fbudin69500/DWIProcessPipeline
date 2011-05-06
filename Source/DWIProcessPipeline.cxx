@@ -90,6 +90,11 @@ int SetPath( std::string &pathString , const char* name , std::vector< std::stri
 int main(int argc, char* argv[])
 {
   PARSE_ARGS;
+  if( data.empty() || templateFile.empty() )
+  {
+    std::cerr << "An input image and a template image must be set" << std::endl ;
+    return EXIT_FAILURE ;
+  }
   char* _scriptDirectory = getenv("DWIProcessPipelineDIR") ;
   std::vector< std::string > path_vec ;
   if( _scriptDirectory != NULL )
@@ -253,7 +258,7 @@ int main(int argc, char* argv[])
   std::string pathCreateMRMLString = CreateMRML_PATH ;
   if( SetPath( pathCreateMRMLString , "CreateMRML" , path_vec ) )
   {
-     return EXIT_FAILURE ;
+    pathCreateMRMLString.clear() ;
   }
   //HistogramMatching
   std::string pathHistogramMatchingString = HistogramMatching_PATH ;

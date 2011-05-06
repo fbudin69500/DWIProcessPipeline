@@ -21,7 +21,8 @@
       <name>data</name>
       <label>DWI image (or DTI or scalar)</label>
       <channel>input</channel>
-      <index>0</index>
+      <flag>-i</flag>
+      <longflag>--input</longflag>
       <description>DWI image (or DTI or scalar)</description>
     </image>
     <string-enumeration>
@@ -39,7 +40,8 @@
       <description>Template, also used a reference image to resample the images if transform is known</description>
       <label>Template/Reference</label>
       <channel>input</channel>
-      <index>1</index>
+      <flag>-t</flag>
+      <longflag>--template</longflag>
     </image>
     <directory>
       <name>outputDir</name>
@@ -147,7 +149,6 @@
     <transform fileExtensions=".mat">
        <name>initialTransform</name>
        <label>Initial transform Node (if transform is known)</label>
-       <flag>-i</flag>
        <longflag>--initialTransform</longflag>
        <channel>input</channel>
        <default></default>
