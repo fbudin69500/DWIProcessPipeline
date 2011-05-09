@@ -81,6 +81,7 @@ If (${COMPUTEORIENTATION} == TRUE ) Then
   Run( output ${Cmd} )
   Echo( ${output} )
   Set( EXT nrrd )
+  GetFilename( INPUT ${ORIENTED_IMAGE} NAME_WITHOUT_EXTENSION )
   Set( INPUTDIR ${OUTPUTDIR} )
   Set( DTI_DIR ${OUTPUTDIR} )
 EndIf (${COMPUTEORIENTATION})
