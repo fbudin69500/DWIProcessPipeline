@@ -3,7 +3,7 @@ If( ${INPUTTYPE} == 'DWI' || ${INPUTTYPE} == 'DTI' )
   Set( MRMLCmd ${MRMLCmd} -y DTI )
 EndIf( ${INPUTTYPE} == 'DWI' || ${INPUTTYPE} == 'DTI' )
 
-GetFilename( TRANSFORMATIONFILE ${TRANSFORMATIONFILE} NAME )
+#GetFilename( TRANSFORMATIONFILE ${TRANSFORMATIONFILE} NAME )
 
 Set( MRMLCmd ${MRMLCmd} -t -f ${TransformRelativePATH} -n Transform )
 

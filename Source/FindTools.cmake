@@ -1,13 +1,19 @@
 #Find tools
 
+set( Slicer3_Manual_bin "" CACHE PATH "Path to Slicer3 (binary directory)" )
+
 macro( FindSlicerToolsMacro path name )
   find_program(${path} ${name} )
   if(NOT ${path} )
-    IF(Slicer3_FOUND)
-      set( ${path} ${Slicer3_HOME}/${Slicer3_INSTALL_PLUGINS_BIN_DIR}/${name} )
-    else(Slicer3_FOUND)
-      message( WARNING "${name} not found. Its path is not set" )
-    endIF (Slicer3_FOUND)
+    IF(Slicer3_Manual_bin)
+      set( ${path} ${Slicer3_Manual_bin}/lib/Slicer3/Plugins/${name} )
+    ELSE(Slicer3_Manual_bin)
+      IF(Slicer3_FOUND)
+        set( ${path} ${Slicer3_HOME}/${Slicer3_INSTALL_PLUGINS_BIN_DIR}/${name} )
+      else(Slicer3_FOUND)
+        message( WARNING "${name} not found. Its path is not set" )
+      endIF (Slicer3_FOUND)
+    ENDIF(Slicer3_Manual_bin)
   endif(NOT ${path} )
 endmacro( FindSlicerToolsMacro )
 
@@ -58,20 +64,19 @@ endif(NOT CREATEMRMLTOOL )
 macro( FindDtiExecutableMacro path name extra)
   find_program( ${path} ${name} )
   if(NOT ${path} )
-    if( ${ITK_USE_REVIEW} )
+    if( ITK_USE_REVIEW OR NOT OPT_USE_SYSTEM_ITK )
       message( STATUS "${name} not found. CMake external used to download it and compile it" )
       set( ${extra} ON )
       set( ${path} ${EXECUTABLE_OUTPUT_PATH}/${name} )
-    else( ${ITK_USE_REVIEW} )
+    else( ITK_USE_REVIEW OR NOT OPT_USE_SYSTEM_ITK )
       message( WARNING "${name} not found and will not be downloaded and compiled. ITK should be compiled with ITK_USE_REVIEW set to ON" )
-    endif( ${ITK_USE_REVIEW} )
+    endif( ITK_USE_REVIEW OR NOT OPT_USE_SYSTEM_ITK )
   endif(NOT ${path} )
 endmacro( FindDtiExecutableMacro )
 
 set( COMPILE_DTIPROCESS OFF )
 FindDtiExecutableMacro( DTIESTIMTOOL dtiestim COMPILE_DTIPROCESS )
 FindDtiExecutableMacro( DTIPROCESSTOOL dtiprocess COMPILE_DTIPROCESS )
-
 
 
 #External Projects
