@@ -93,6 +93,12 @@ If( ${INPUTTYPE} == 'DWI' || ${INPUTTYPE} == 'DTI' )
 
 Endif( ${INPUTTYPE} == 'DWI' || ${INPUTTYPE} == 'DTI' )
 
+if( ${SKULLSTRIP} == TRUE )
+    Set( MASK ${ROOTNAME}_Mask_reg.nrrd )
+    Set( MRMLCmd ${MRMLCmd} -v -f ${MASK} -l -cc 10 )
+endif( ${SKULLSTRIP} == TRUE )
+
+
 Echo ('Creates MRML scene')
 Run (output ${MRMLCmd})
 Echo (${output})
