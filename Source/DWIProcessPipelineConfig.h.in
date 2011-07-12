@@ -16,3 +16,4 @@
 #define ImageMath_PATH "@ImageMathTOOL@"
 #define HistogramMatching_PATH "@HistogramMatchingTOOL@"
 #define MaskComputation_PATH "@MaskTOOL@"
+#define N4_PATH "@N4TOOL@"

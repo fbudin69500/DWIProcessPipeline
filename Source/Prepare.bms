@@ -88,13 +88,10 @@ If (${COMPUTEORIENTATION} == TRUE ) Then
   Set( DTI_DIR ${OUTPUTDIR} )
 EndIf (${COMPUTEORIENTATION})
 
-
 If( ${INPUTTYPE} == 'DWI' )
-  Set( B0Flag "" )
+  #We always create the B0 image, in the temp directory. It is used to compute the bias field correction
+  Set( B0Flag --B0 ${TEMPDIR}/${B0} )
   Set( IDWIFlag "" )
-  If (${CREATEB0} == TRUE ) Then
-    Set( B0Flag --B0 ${TEMPDIR}/${B0} )
-  EndIf (${CREATEB0})
   echo ('Creation of the DTI' )
   Set( MASK ${ROOTNAME}_mask.nrrd )
   Set( BASELINE ${ROOTNAME}_baseline.nrrd )
@@ -112,8 +109,11 @@ If( ${INPUTTYPE} == 'DWI' )
   Endif (${CREATEB0} == TRUE || ${CREATEIDWI} == TRUE )
 EndIf( ${INPUTTYPE} == 'DWI' )
 
+If( ${BiasCorrection} == TRUE && N4PATH )
+  include( BiasFieldCorrection.bms )
+EndIf( ${BiasCorrection} == TRUE && N4PATH )
+
 If(${InitialTransform} != '' )
-#  Set( GRID ${TEMPDIR}/initialGrid.nrrd )
   Set( Grid ${TEMPDIR}/initialGrid.nrrd )
   Set( GridCmd ${ITKTransformToolsPATH} size ${INPUTDIR}/${INPUT}.${EXT} ${InitialTransform} --grid ${Grid} )
   Run( output ${GridCmd} )

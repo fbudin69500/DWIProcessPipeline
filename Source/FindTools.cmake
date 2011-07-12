@@ -22,7 +22,7 @@ FindSlicerToolsMacro( REGISTERIMAGESTOOL RegisterImages )
 FindSlicerToolsMacro( HistogramMatchingTOOL HistogramMatching )
 FindSlicerToolsMacro( RESAMPLEVOLUME2TOOL ResampleVolume2 )
 FindSlicerToolsMacro( DIFFUSIONTENSORESTIMATIONTOOL DiffusionTensorEstimation )
-
+FindSlicerToolsMacro( N4TOOL N4ITKBiasFieldCorrection )
 
 macro( FindExecutableMacro path name extra)
   find_program(${path} ${name} )

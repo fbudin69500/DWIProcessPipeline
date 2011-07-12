@@ -266,6 +266,12 @@ int main(int argc, char* argv[])
   {
      return EXIT_FAILURE ;
   }
+  //Bias Field Correction
+  std::string pathN4String = N4_PATH ;
+  if( SetPath( pathN4String , "N4ITKBiasFieldCorrection" , path_vec ) )
+  {
+     return EXIT_FAILURE ;
+  }
   //get batchmake script directory
   std::string script = "echo('Starting BatchMake Script')\n" ;
 ////Set options/////////////////////
@@ -288,6 +294,7 @@ int main(int argc, char* argv[])
   script += SetOptionalString( pathDiffusionTensorEstimationString , "DiffusionTensorEstimationPATH" ) ;
   script += SetOptionalString( pathHistogramMatchingString , "HistogramMatchingPATH" ) ;
   script += SetOptionalString( pathCreateMRMLString , "CreateMRMLPATH" ) ;
+  script += SetOptionalString( pathN4String , "N4PATH" ) ;
   script += SetOptionalString( pathMaskComputationString , "MaskComputationPATH" ) ;
   script += SetOptionalString( transformRelativePath , "TransformRelativePATH" ) ;
   script += SetOptionalString( initialTransform , "InitialTransform" ) ;
