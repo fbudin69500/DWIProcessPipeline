@@ -318,6 +318,7 @@ int main(int argc, char* argv[])
   script += SetOptionalString( imnn2 , "IMNN2" ) ;
   script += SetOptionalString( extimnn2 , "EXT_IMNN2" ) ;
   script += SetBOOL( createB0 , "CREATEB0" ) ;
+  script += SetBOOL( biasCorrection , "BiasCorrection" );
   script += SetBOOL( createIDWI , "CREATEIDWI" ) ;
   script += SetBOOL( computeOrientation , "COMPUTEORIENTATION" ) ;
   script += "Set( MANUALORIENTATION \'" + manualOrientation + "\' )\n" ;

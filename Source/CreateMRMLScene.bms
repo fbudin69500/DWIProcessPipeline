@@ -38,7 +38,9 @@ EndIf( ${SCALE} == TRUE )
 
 If( ${INPUTTYPE} == 'DWI' )
   If (${CREATEB0} == TRUE ) Then
-    Set (MRMLCmd ${MRMLCmd} -v -f ${ROOTNAME}_b0_reg.nrrd )
+    RegEx( TAG ${B0} '\.'\${B0_EXT} REPLACE '' )
+    GetFilename( case_NO_PATH ${TAG} NAME )
+    Set (MRMLCmd ${MRMLCmd} -v -f ${TAG}_reg.nrrd )
   EndIf (${CREATEB0})
   If (${CREATEIDWI} == TRUE ) Then
     Set (MRMLCmd ${MRMLCmd} -v -f ${ROOTNAME}_idwi_reg.nrrd )

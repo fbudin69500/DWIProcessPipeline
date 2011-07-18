@@ -210,6 +210,13 @@
       <default>false</default>
     </boolean>
     <boolean>
+      <name>biasCorrection</name>
+      <description>Bias field correction applyed to the b0 and IDWI images</description>
+      <label>Bias Field Correction</label>
+      <longflag>biasCorrection</longflag> 
+      <default>true</default>
+    </boolean>
+    <boolean>
       <name>nologEuclidean</name>
       <description>Do not use the log euclidean framework to resample the DTI</description>
       <label>nolog-Euclidean</label>

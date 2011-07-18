@@ -19,7 +19,8 @@ If( ${COPY_INPUTS} == TRUE ) Then
   EndIf( ${INPUTTYPE} == 'DWI' )
   If( ${INPUTTYPE} == 'scalar' )
       Set( CmdTool ${ResampleVolume2PATH} )
-      Set( B0 ${ROOTNAME}.nrrd )
+      Set( B0_EXT nrrd )
+      Set( B0 ${ROOTNAME}.${B0_EXT} )
   EndIf( ${INPUTTYPE} == 'scalar' )
   If( ${INPUTTYPE} == 'DTI' )
       Set( CmdTool ${ResampleDTIPATH} )
@@ -69,6 +70,7 @@ If (${COMPUTEORIENTATION} == TRUE ) Then
   EndIf( ${INPUTTYPE} == 'DWI' )
   If( ${INPUTTYPE} == 'scalar' )
       Set( B0 ${ORIENTED_IMAGE} )
+      Set( B0_EXT nrrd )
       Set( CmdTool ${ResampleVolume2PATH} )
   EndIf( ${INPUTTYPE} == 'DWI' )
   If( ${INPUTTYPE} == 'DTI' )
@@ -89,7 +91,7 @@ If (${COMPUTEORIENTATION} == TRUE ) Then
 EndIf (${COMPUTEORIENTATION})
 
 If( ${INPUTTYPE} == 'DWI' )
-  #We always create the B0 image, in the temp directory. It is used to compute the bias field correction
+  #We always create the B0 image, in the temp directory. It is used to compute the bias field correction and the mask
   Set( B0Flag --B0 ${TEMPDIR}/${B0} )
   Set( IDWIFlag "" )
   echo ('Creation of the DTI' )
