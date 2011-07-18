@@ -47,12 +47,7 @@ echo( ${output} )
 
 If( ${INPUTTYPE} == 'DWI' )
   If (${CREATEB0} == TRUE ) Then
-    echo('begin')
-    echo(${B0} )
-    echo(${B0_EXT} )
-    echo('end')
     RegEx( TAG ${B0} '\.'\${B0_EXT} REPLACE '' )
-    echo(${TAG} )
     Set( INPUT_LIST ${TEMPDIR}/${TAG} )
     Set( INPUT_EXT_LIST ${B0_EXT} )
     Set( INPUT_LIST_REORIENT FALSE )

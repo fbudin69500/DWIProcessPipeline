@@ -40,10 +40,12 @@ If( ${INPUTTYPE} == 'DWI' )
   If (${CREATEB0} == TRUE ) Then
     RegEx( TAG ${B0} '\.'\${B0_EXT} REPLACE '' )
     GetFilename( case_NO_PATH ${TAG} NAME )
-    Set (MRMLCmd ${MRMLCmd} -v -f ${TAG}_reg.nrrd )
+    Set (MRMLCmd ${MRMLCmd} -v -f ${case_NO_PATH}_reg.nrrd )
   EndIf (${CREATEB0})
   If (${CREATEIDWI} == TRUE ) Then
-    Set (MRMLCmd ${MRMLCmd} -v -f ${ROOTNAME}_idwi_reg.nrrd )
+    RegEx( TAG ${IDWImage} '\.nrrd' REPLACE '' )
+    GetFilename( case_NO_PATH ${TAG} NAME )
+    Set (MRMLCmd ${MRMLCmd} -v -f ${case_NO_PATH}_reg.nrrd )
   EndIf (${CREATEIDWI})
 EndIf( ${INPUTTYPE} == 'DWI' )
 
