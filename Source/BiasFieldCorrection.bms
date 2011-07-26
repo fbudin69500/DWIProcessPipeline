@@ -1,6 +1,6 @@
 echo( 'Bias Field Correction' )
 If( ${INPUTTYPE} == 'scalar' )
-  Set( image ${INPUTDIR}/${ORIG_IMAGE} )
+  Set( image ${INPUTDIR}/${INPUT}.${EXT} )
   Set( outputImage ${TEMPDIR}/${ROOTNAME}_biasCorrected.nrrd )
   Set( Cmd ${N4PATH} --inputimage ${image} --outputimage ${outputImage} --bsplineorder 4 )
   run( output ${Cmd} )
