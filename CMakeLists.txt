@@ -95,6 +95,7 @@ ExternalProject_Add(${proj}
     -DImageMathTOOL:PATH=${ImageMathTOOL}
     -DHistogramMatchingTOOL:PATH=${HistogramMatchingTOOL}
     -DMaskTOOL:PATH=${MaskTOOL}
+    -DN4TOOL:PATH=${N4TOOL}
     -DNO_FIND:BOOL=ON
   INSTALL_COMMAND ""
 )
